@@ -1,0 +1,22 @@
+{
+    "name": "moonlight",
+    "description": "Moonlight",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Denis Shumeev",
+            "email": "denis-shumeev@yandex.ru"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+        "illuminate/support": "5.1.*",
+        "firebase/php-jwt": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Moonlight\\": "src"
+        }
+    },
+    "minimum-stability": "stable"
+}
