@@ -15,7 +15,6 @@ use Moonlight\Main\Element;
 use Moonlight\Utils\UserJwtCodec;
 
 Route::group(['prefix' => 'moonlight/api'], function() {
-    
     Route::get('/', ['as' => 'home', 'uses' => 'Moonlight\Controllers\HomeController@show']);
     
     Route::post('auth', 'Moonlight\Controllers\UserController@auth');
@@ -27,7 +26,6 @@ Route::group(['prefix' => 'moonlight/api'], function() {
     Route::group(['middleware' => [
         AuthMiddleware::class,
     ]], function () {
-        
         Route::get('token', 'Moonlight\Controllers\UserController@token');
         
         Route::get('parameters', 'Moonlight\Controllers\ProfileController@parameters');
@@ -136,9 +134,5 @@ Route::group(['prefix' => 'moonlight/api'], function() {
         Route::post('edit/{classId}', 'Moonlight\Controllers\EditController@save');
         
         Route::delete('edit/{classId}', 'Moonlight\Controllers\EditController@delete');
-        
     });
-    
-    Route::get('plugin', 'App\Http\Controllers\PluginController@plugin');
-    
 });

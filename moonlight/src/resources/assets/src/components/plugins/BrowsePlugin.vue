@@ -1,36 +1,54 @@
 <template>
   <transition name="show">
     <div class="plugin" v-if="show">
-      <statistic :classId="classId" v-if="classId === 'App.ServiceSection.9'"></statistic>
+      <test-loader v-if="classId === 'App.ServiceSection.4'" :classId="classId"></test-loader>
     </div>
   </transition>
 </template>
 
 <script>
-import Statistic from '@/components/plugins/Statistic'
+import TestLoader from '@/components/plugins/TestLoader'
 
 export default {
   name: 'browse-plugin',
+  components: { TestLoader },
   props: ['classId'],
-  components: { Statistic },
   data () {
     return {
-      show: false
+      show: true,
+      plugin: null
     }
   },
   watch: {
     classId (to, from) {
+      /*
       this.show = false
+      this.plugin = null
 
-      this.$http.get('/browse/root').then((response) => {
+      this.$http.get('/plugins/browse/' + this.classId).then((response) => {
+        let data = response.body
+
+        if (data.plugin) {
+          this.plugin = data.plugin
+        }
+
         this.show = true
       })
+      */
     }
   },
   created () {
-    this.$http.get('/browse/root').then((response) => {
+    /*
+    this.$http.get('/plugins/browse/' + this.classId).then((response) => {
+      let data = response.body
+
+      if (data.plugin) {
+        this.plugin = data.plugin
+      }
+
       this.show = true
     })
+    */
   },
   methods: {
 
@@ -39,5 +57,7 @@ export default {
 </script>
 
 <style scoped>
+.plugin {
 
+}
 </style>

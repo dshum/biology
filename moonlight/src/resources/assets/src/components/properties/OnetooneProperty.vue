@@ -1,6 +1,6 @@
 <template>
   <div v-if="mode === 'browse'">
-    <div v-if="view.value"><a>{{ view.value.name }}</a></div>
+    <div v-if="view.value"><router-link :to="{name: 'browse', params: {classId: view.value.classId}, query: {mode: 'edit'}}">{{ view.value.name }}</router-link></div>
     <div v-else class="undefined">Не определено</div>
   </div>
   <div v-else-if="mode === 'edit'">
@@ -32,7 +32,7 @@ export default {
   components: {
     Autocomplete
   },
-  props: ['className', 'mode', 'view'],
+  props: ['mode', 'view'],
   watch: {
     view (to, from) {
       this.initial = null

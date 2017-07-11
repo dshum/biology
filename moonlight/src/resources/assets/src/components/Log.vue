@@ -55,7 +55,7 @@
             <div v-if="page > 1 && actions[page]" class="page">Страница {{ page }}</div>
             <ul class="log">
               <li v-for="action in actions[page]">
-                <div class="avatar"><img v-bind:src="action.user.avatar" /></div>
+                <div class="avatar"><img :src="action.user.avatar ? action.user.avatar : 'static/img/default-avatar.png'" /></div>
                 <div class="date">{{ action.created_at | date('DD.MM.YYYY')}}<br><span class="time">{{action.created_at | date('HH:mm:ss') }}</span></div>
                 <span class="user">{{ action.user.login }}</span> <small>{{ action.user.first_name }} {{action.user.last_name }}</small><br>
                 <span class="title">{{ action.action_type_name }}</span> <span>{{ action.comments }}</span>

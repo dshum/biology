@@ -18,12 +18,12 @@
 <body>
 	<div class="container">
 		<nav>
-			<logo><a href="{{ URL::route('welcome') }}"><i class="fa fa-graduation-cap"></i>Тесты ЕГЭ по биологии</a></logo>
+			<logo><a href="{{ route('welcome') }}"><i class="fa fa-graduation-cap"></i>Тесты ЕГЭ по биологии</a></logo>
 			<user>
 				@if (Auth::check())
-				<a href="{{ URL::route('home') }}">{{ Auth::user()->email }}</a>
+				<a href="{{ route('home') }}">{{ Auth::user()->email }}</a>
 				@else
-				<a href="{{ URL::route('login') }}">Войти</a> &nbsp; | &nbsp; <a href="{{ URL::route('signup') }}">Зарегистрироваться</a>
+				<a href="{{ route('login') }}">Войти</a> &nbsp; | &nbsp; <a href="{{ route('register') }}">Зарегистрироваться</a>
 				@endif
 			</user>
 		</nav>
@@ -32,7 +32,7 @@
 		</main>
 		<footer>
 			@if (Auth::check())
-			<div class="right"><a href="{{ URL::route('logout') }}"><i class="fa fa-sign-out"></i>Выход</a></div>
+			<div class="right"><a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i>Выход</a></div>
 			@endif
 			<div>Тесты ЕГЭ по биологии, {{ date('Y') }}</div>
 		</footer>

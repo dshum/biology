@@ -8,7 +8,7 @@
 @if (isset($error) && $error)
 <div class="error">{{ $error }}</div>
 @endif
-<form action="{{ URL::route('login') }}" method="post">
+<form action="{{ route('login') }}" method="post">
     {{ csrf_field() }}
     <div class="row">
         <label>E-mail:</label><br>

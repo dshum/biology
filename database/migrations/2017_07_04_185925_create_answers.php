@@ -20,7 +20,7 @@ class CreateAnswers extends Migration
 			$table->integer('order');
             $table->mediumText('answer')->nullable();
             $table->boolean('correct')->nullable();
-			$table->integer('test_id')->unsigned()->nullable()->default(null)->index();
+			$table->integer('question_id')->unsigned()->nullable()->default(null)->index();
 			$table->timestamps();
 			$table->softDeletes(); 
 		});

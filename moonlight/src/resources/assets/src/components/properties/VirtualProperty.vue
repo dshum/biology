@@ -11,6 +11,6 @@
 <script>
 export default {
   name: 'virtual-property',
-  props: ['className', 'mode', 'view', 'model']
+  props: ['mode', 'view']
 }
 </script>

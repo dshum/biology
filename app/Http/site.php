@@ -15,6 +15,7 @@ use Moonlight\Properties\PasswordProperty;
 use Moonlight\Properties\RichtextProperty;
 use Moonlight\Properties\TextareaProperty;
 use Moonlight\Properties\TextfieldProperty;
+use Moonlight\Properties\PluginProperty;
 use Moonlight\Properties\VirtualProperty;
 
 $site = \App::make('site');
@@ -150,6 +151,7 @@ $site->
 		setTitle('Ученик')->
 		setMainProperty('email')->
         setCreate(true)->
+		setTree(true)->
         setPerPage(10)->
         addOrderBy('created_at', 'desc')->
 		addProperty(
@@ -176,16 +178,19 @@ $site->
 		)->
         addProperty(
 			CheckboxProperty::create('activated')->
-			setTitle('Активирован')
+			setTitle('Активирован')->
+			setShow(true)
 		)->
         addProperty(
 			CheckboxProperty::create('banned')->
-			setTitle('Заблокирован')
+			setTitle('Заблокирован')->
+			setShow(true)
 		)->
         addProperty(
 			OneToOneProperty::create('service_section_id')->
 			setTitle('Служебный раздел')->
 			setRelatedClass('App\ServiceSection')->
+			setRequired(true)->
 			setParent(true)->
             setOpenItem(true)
 		)->
@@ -217,6 +222,7 @@ $site->
 			OneToOneProperty::create('service_section_id')->
 			setTitle('Служебный раздел')->
 			setRelatedClass('App\ServiceSection')->
+			setRequired(true)->
 			setParent(true)->
             setOpenItem(true)
 		)->
@@ -247,6 +253,7 @@ $site->
 		addProperty(
 			OneToOneProperty::create('subject_id')->
 			setTitle('Предмет')->
+			setRequired(true)->
 			setRelatedClass('App\Subject')->
 			setParent(true)->
             setOpenItem(true)
@@ -278,6 +285,7 @@ $site->
 		addProperty(
 			OneToOneProperty::create('topic_id')->
 			setTitle('Тема')->
+			setRequired(true)->
 			setRelatedClass('App\Topic')->
 			setParent(true)->
             setOpenItem(true)
@@ -328,15 +336,20 @@ $site->
 		setTitle('Вопрос')->
 		setMainProperty('name')->
         setCreate(true)->
+		setPerPage(25)->
 		addOrder()->
 		addProperty(
 			TextfieldProperty::create('name')->
-			setTitle('Название')->
-			setRequired(true)
+			setTitle('Название')
 		)->
 		addProperty(
 			RichtextProperty::create('question')->
 			setTitle('Текст вопроса')->
+			setShow(true)
+		)->
+		addProperty(
+			PluginProperty::create('answers_info')->
+			setTitle('Ответы')->
 			setShow(true)
 		)->
 		addProperty(
@@ -391,8 +404,7 @@ $site->
 		addOrder()->
 		addProperty(
 			TextfieldProperty::create('name')->
-			setTitle('Название')->
-			setRequired(true)
+			setTitle('Название')
 		)->
 		addProperty(
 			TextfieldProperty::create('answer')->
@@ -405,14 +417,9 @@ $site->
 			setShow(true)
 		)->
 		addProperty(
-			ManyToManyProperty::create('questions')->
-			setTitle('Вопросы')->
-			setRelatedClass('App\Question')->
-            setRelatedMethod('tests')
-		)->
-		addProperty(
 			OneToOneProperty::create('question_id')->
 			setTitle('Вопрос')->
+			setRequired(true)->
 			setRelatedClass('App\Question')->
 			setParent(true)->
             setOpenItem(true)
@@ -427,28 +434,32 @@ $site->
 
 	addItem(
 		Item::create('App\UserTest')->
-		setTitle('Тест')->
+		setTitle('Тест ученика')->
 		setMainProperty('name')->
 		addProperty(
 			TextfieldProperty::create('name')->
-			setTitle('Название')->
-			setRequired(true)
+			setTitle('Название')
 		)->
 		addProperty(
 			CheckboxProperty::create('complete')->
-			setTitle('Завершен')
+			setTitle('Завершен')->
+			setShow(true)
 		)->
 		addProperty(
 			OneToOneProperty::create('user_id')->
 			setTitle('Ученик')->
+			setRequired(true)->
 			setRelatedClass('App\User')->
 			setParent(true)->
-            setOpenItem(true)
+            setOpenItem(true)->
+			setShow(true)
 		)->
 		addProperty(
 			OneToOneProperty::create('test_id')->
 			setTitle('Тест')->
-			setRelatedClass('App\Test')
+			setRequired(true)->
+			setRelatedClass('App\Test')->
+			setShow(true)
 		)->
 		addTimestamps()->
 		addSoftDeletes()
@@ -462,30 +473,37 @@ $site->
 		Item::create('App\UserQuestion')->
 		setTitle('Вопрос ученика')->
 		setMainProperty('name')->
+		setPerPage(25)->
 		addProperty(
 			TextfieldProperty::create('name')->
-			setTitle('Название')->
-			setRequired(true)
+			setTitle('Название')
 		)->
 		addProperty(
 			CheckboxProperty::create('correct')->
-			setTitle('Правильный')
+			setTitle('Правильный')->
+			setShow(true)
 		)->
 		addProperty(
 			TextfieldProperty::create('answer')->
-			setTitle('Ответ')
+			setTitle('Ответ')->
+			setRequired(true)->
+			setShow(true)
 		)->
 		addProperty(
 			OneToOneProperty::create('user_test_id')->
 			setTitle('Тест ученика')->
+			setRequired(true)->
 			setRelatedClass('App\UserTest')->
 			setParent(true)->
-            setOpenItem(true)
+            setOpenItem(true)->
+			setShow(true)
 		)->
 		addProperty(
 			OneToOneProperty::create('question_id')->
 			setTitle('Вопрос')->
-			setRelatedClass('App\Question')
+			setRequired(true)->
+			setRelatedClass('App\Question')->
+			setShow(true)
 		)->
 		addTimestamps()->
 		addSoftDeletes()
@@ -501,20 +519,23 @@ $site->
 		setMainProperty('name')->
 		addProperty(
 			TextfieldProperty::create('name')->
-			setTitle('Название')->
-			setRequired(true)
+			setTitle('Название')
 		)->
 		addProperty(
 			OneToOneProperty::create('user_question_id')->
 			setTitle('Вопрос ученика')->
+			setRequired(true)->
 			setRelatedClass('App\UserQuestion')->
 			setParent(true)->
-            setOpenItem(true)
+            setOpenItem(true)->
+			setShow(true)
 		)->
 		addProperty(
 			OneToOneProperty::create('answer_id')->
 			setTitle('Ответ')->
-			setRelatedClass('App\Answer')
+			setRequired(true)->
+			setRelatedClass('App\Answer')->
+			setShow(true)
 		)->
 		addTimestamps()->
 		addSoftDeletes()
@@ -538,6 +559,7 @@ $site->
 		addProperty(
 			OneToOneProperty::create('service_section_id')->
 			setTitle('Служебный раздел')->
+			setRequired(true)->
 			setRelatedClass('App\ServiceSection')->
 			setParent(true)->
             setOpenItem(true)
@@ -552,9 +574,12 @@ $site->
 	bind(env('site.types', 'App.ServiceSection.5'), 'App.QuestionType')->
 	bind(env('site.students', 'App.ServiceSection.1'), 'App.User')->
 	bind('App.Subject', 'App.Topic')->
-	bind('App.Topic', ['App.Subtopic', 'App.Test'])->
+	bind('App.Topic', ['App.Subtopic', 'App.Test', 'App.Question'])->
 	bind('App.Subtopic', 'App.Test')->
 	bind('App.Test', 'App.Question')->
 	bind('App.Question', 'App.Answer')->
+	bind('App.User', 'App.UserTest')->
+	bind('App.UserTest', 'App.UserQuestion')->
+	bind('App.UserQuestion', 'App.UserAnswer')->
 
 	end();

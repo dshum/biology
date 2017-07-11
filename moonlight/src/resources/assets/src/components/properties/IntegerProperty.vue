@@ -21,7 +21,7 @@
 <script>
 export default {
   name: 'integer-property',
-  props: ['className', 'mode', 'view', 'model'],
+  props: ['mode', 'view'],
   mounted () {
     this.update(this.view.value)
   },

@@ -15,7 +15,7 @@
             Добавить:<template v-for="(create, index) in creates"><span v-if="index">,</span><router-link :to="{name: 'browse', params: {classId: classId}, query: {mode: 'create', item: create.id}}">{{ create.name }}</router-link></template>
           </div>
         </transition>
-        <browse-plugin :classId="classId"></browse-plugin>
+        <browse-plugin :classId="classId" v-if="showBrowsePlugin"></browse-plugin>
         <div v-for="i in items">
           <item :classId="classId" :item="i" v-on:load="load(1)" v-on:empty="load(0)"></item>
         </div>
@@ -42,6 +42,7 @@ export default {
   data () {
     return {
       show: false,
+      showBrowsePlugin: false,
       loading: false,
       currentItem: this.item,
       currentElement: this.element,
@@ -83,6 +84,7 @@ export default {
     },
     getBrowse () {
       this.loading = true
+      this.showBrowsePlugin = false
       this.isEmpty = false
       this.isAnyone = false
       this.loaded = 0
@@ -105,6 +107,7 @@ export default {
         }
 
         this.loading = false
+        this.showBrowsePlugin = true
         this.show = true
       })
     },

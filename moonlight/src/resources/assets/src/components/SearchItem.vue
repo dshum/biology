@@ -9,7 +9,7 @@
           <div class="search-form-links">
             <div class="row">
               <div class="link" v-for="property in properties" :class="property.active ? 'active' : ''" @click="toggle(property)">
-                <property :className="property.className" mode="link" :view="property.view" :model="model"></property>
+                <property :property="property" mode="link" :view="property.view"></property>
               </div>
             </div>
           </div>
@@ -20,7 +20,7 @@
                   <div class="block" v-show="property.active">
                     <div class="container">
                       <div class="close" @click="close(property)"><i class="fa fa-minus-square-o"></i></div>
-                      <property :className="property.className" mode="search" :view="property.view" :model="model"></property>
+                      <property :property="property" mode="search" :view="property.view"></property>
                     </div>
                   </div>
                 </transition>
@@ -58,7 +58,7 @@
                 <td class="browse"><router-link :to="{name: 'browse', params: {classId: element.classId}}"><i class="fa fa-angle-right"></i></router-link></td>
                 <td class="name"><router-link :to="{name: 'browse', params: {classId: element.classId}, query: {mode: 'edit'}}"><i class="fa fa-pencil"></i><span>{{ element.name }}</span></router-link></td>
                 <td v-for="property in currentItem.properties">
-                  <property :className="property.className" mode="browse" :view="element.views[property.name]"></property>
+                  <property :property="property" mode="browse" :view="element.views[property.name]"></property>
                 </td>
                 <td class="check"><div class="check"></div></td>
               </tr>

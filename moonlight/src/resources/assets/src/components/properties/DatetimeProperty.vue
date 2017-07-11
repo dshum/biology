@@ -37,7 +37,7 @@ import Datepicker from 'vuejs-datepicker'
 export default {
   name: 'datetime-property',
   components: { Datepicker },
-  props: ['className', 'mode', 'view', 'model'],
+  props: ['mode', 'view'],
   data () {
     return {
       value: {}

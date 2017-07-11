@@ -28,7 +28,7 @@
 <script>
 export default {
   name: 'checkbox-property',
-  props: ['className', 'mode', 'view', 'model'],
+  props: ['mode', 'view'],
   data () {
     return {
       value: 2

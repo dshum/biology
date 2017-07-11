@@ -18,7 +18,7 @@
 <script>
 export default {
   name: 'textarea-property',
-  props: ['className', 'mode', 'view', 'model'],
+  props: ['mode', 'view'],
   computed: {
     text () {
       return this.view.value ? this.view.value.replace(/\n/g, '<br />') : ''

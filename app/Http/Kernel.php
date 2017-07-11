@@ -40,6 +40,10 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
         ],
+
+        'plugins' => [
+            \Moonlight\Middleware\AuthMiddleware::class,
+        ],
     ];
 
     /**

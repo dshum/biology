@@ -28,4 +28,29 @@ class Question extends Model implements ElementInterface
 	{
 		return $this->belongsToMany(static::$testModel, static::$testsQuestionsPivot);
 	}
+
+	public function answers()
+    {
+        return $this->hasMany('App\Answer');
+    }
+
+	public function getAnswersInfo()
+	{
+		$scope = [];
+
+		$scope['answers'] = [];
+
+		$answers = $this->answers()->orderBy('order')->get();
+
+        foreach ($answers as $answer) {
+			$scope['answers'][] = [
+				'id' => $answer->id,
+				'classId' => $answer->getClassId(),
+				'answer' => $answer->answer,
+				'correct' => $answer->correct,
+			];
+        }
+
+		return $scope;
+	}
 }

@@ -257,8 +257,8 @@ abstract class BaseProperty
         
         $value = $request->input($name);
         
-        if ( ! mb_strlen($value)) $value = null;
-        if ( $value === 'null') $value = null;
+        if (! mb_strlen($value)) $value = null;
+        if ($value === 'null') $value = null;
         
         return $value;
     }
@@ -269,6 +269,12 @@ abstract class BaseProperty
         $value = $this->buildInput();
 
 		$this->element->$name = $value;
+
+		if ($this->isMainProperty() && ! $value) {
+			$this->element->$name = $this->element->id
+				? $this->element->getClassId()
+				: 'Element';
+		}
 
 		return $this;
 	}
@@ -316,7 +322,7 @@ abstract class BaseProperty
         $name = $this->getName();
         $value = $request->input($name);
 
-		if ( ! mb_strlen($value)) $value = null;
+		if (! mb_strlen($value)) $value = null;
 
 		$scope = array(
 			'name' => $this->getName(),

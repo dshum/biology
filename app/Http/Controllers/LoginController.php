@@ -62,7 +62,6 @@ class LoginController extends Controller {
 		return redirect()->route('home');
 	}
 
-
 	public function logout(Request $request)
 	{
 		$scope = [];
@@ -71,7 +70,6 @@ class LoginController extends Controller {
 
 		return redirect()->back();
 	}
-
 
 	public function index(Request $request)
 	{

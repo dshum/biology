@@ -829,6 +829,10 @@ class BrowseController extends Controller
                 'name' => $property->getName(),
                 'title' => $property->getTitle(),
                 'className' => $property->getClassName(),
+                'item' => [
+                    'id' => $currentItem->getNameId(),
+                    'name' => $currentItem->getTitle(),
+                ]
             ];
         }
 

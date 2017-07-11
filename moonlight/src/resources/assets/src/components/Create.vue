@@ -14,7 +14,7 @@
         <h2 v-if="currentItem">Новый элемент типа <b>{{currentItem.name}}</b></h2>
         <form @submit.prevent="save()">
           <div class="row" v-for="property in properties">
-            <property v-on:update="update(arguments[0], arguments[1])" v-on:save="save()":className="property.className" mode="edit" :view="property.view"></property>
+            <property v-on:update="update(arguments[0], arguments[1])" v-on:save="save()" :property="property" mode="edit" :view="property.view"></property>
           </div>
           <div class="row submit">
             <input type="submit" value="Сохранить" class="btn">

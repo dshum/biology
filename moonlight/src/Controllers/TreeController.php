@@ -361,7 +361,7 @@ class TreeController extends Controller
                 'classId' => $element->getClassId(),
                 'name' => $element->{$currentItem->getMainProperty()},
                 'children' => $children,
-                'open' => false,
+                'open' => true,
             ];
         }
         

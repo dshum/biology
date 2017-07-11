@@ -14,19 +14,27 @@
 use App\Test;
 
 Route::group(['before' => 'guest'], function() {
-	Route::get('/signup', ['as' => 'signup', 'uses' => 'SignupController@index']);
+	Route::get('/register', ['as' => 'register', 'uses' => 'RegisterController@index']);
+	Route::post('/register', ['as' => 'register', 'uses' => 'RegisterController@register']);
+
+	Route::get('/register/success', ['as' => 'success', 'uses' => 'RegisterController@success']);
+	Route::get('/register/activate', ['as' => 'activate', 'uses' => 'RegisterController@activate']);
+	Route::get('/register/complete', ['as' => 'complete', 'uses' => 'RegisterController@complete']);
+
 	Route::get('/login', ['as' => 'login', 'uses' => 'LoginController@index']);
 	Route::post('/login', ['as' => 'login', 'uses' => 'LoginController@login']);
+
 	Route::get('/restore', ['as' => 'restore', 'uses' => 'RestoreController@index']);
+	Route::post('/restore', ['as' => 'restore', 'uses' => 'RestoreController@restore']);
 });
 
 Route::group(['before' => 'auth'], function() {
-
 	Route::get('/logout', ['as' => 'logout', 'uses' => 'LoginController@logout']);
 
 	Route::get('/home', ['as' => 'home', 'uses' => 'HomeController@index']);
 
 	Route::get('/test_{id}', ['as' => 'test', 'uses' => 'TestController@index']);
+	Route::post('/test_{id}', ['as' => 'test', 'uses' => 'TestController@save']);
 });
 
 Route::get('/', ['as' => 'welcome', 'uses' => 'WelcomeController@index']);

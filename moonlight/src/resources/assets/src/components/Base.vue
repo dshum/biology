@@ -161,6 +161,8 @@ export default {
             this.loggedUser.photo
             ? this.loggedUser.photo
             : 'static/img/default-avatar.png'
+
+          localStorage.setItem('loggedUserId', this.loggedUser.id)
         } else {
           this.logout()
         }
@@ -743,19 +745,7 @@ nav .menu ul > li span {
 /* Tree */
 
 .tree {
-  display: block;
   margin-bottom: 3rem;
-}
-
-.tree a {
-  color: inherit;
-  text-decoration: underline;
-  white-space: nowrap;
-}
-
-.tree a.router-link-active {
-  color: teal;
-  text-decoration: underline;
 }
 
 .tree .margin {
@@ -765,20 +755,22 @@ nav .menu ul > li span {
 
 .tree .item {
   margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
   font-size: 0.8rem;
   color: #234e9e;
   font-weight: bold;
 }
 
 .tree > div > div[item] > .item {
+  padding-left: 0;
   font-size: 1.3rem;
   color: #37a;
   font-weight: normal;
 }
 
 .tree .padding {
-  margin-left: 1rem;
-  padding-left: 2rem;
+  margin-left: 0.5rem;
+  padding-left: 1rem;
   overflow: hidden;
 }
 
@@ -812,6 +804,16 @@ nav .menu ul > li span {
   top: -2px;
   color: #3a7;
   font-size: 1.5rem;
+}
+
+.tree span.go {
+  text-decoration: underline;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tree span.go.router-link-active {
+  color: teal;
 }
 
 /* Context menu */

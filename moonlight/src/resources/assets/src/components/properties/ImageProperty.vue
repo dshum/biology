@@ -20,7 +20,7 @@
 <script>
 export default {
   name: 'image-property',
-  props: ['className', 'mode', 'view'],
+  props: ['mode', 'view'],
   data () {
     return {
       drop: false

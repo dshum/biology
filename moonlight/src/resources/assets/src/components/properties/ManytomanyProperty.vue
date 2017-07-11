@@ -31,7 +31,7 @@ export default {
   components: {
     Autocomplete
   },
-  props: ['className', 'mode', 'view'],
+  props: ['mode', 'view'],
   watch: {
     view (to, from) {
       this.initial = null

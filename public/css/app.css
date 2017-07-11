@@ -104,20 +104,20 @@ h1, h2, h3 {
 }
 
 h1 {
-    margin-bottom: 1rem;
+    margin: 1rem 0;
     font-size: 2rem;
     color: steelblue;
 }
 
 h2 {
-  margin: 0.5rem 0 0 0;
+  margin: 0.5rem 0;
   font-size: 1.6rem;
   color: tomato;
 }
 
 h3 {
-  margin: 0.3rem 0 0 0;
-  font-size: 1.2rem;
+  margin: 0.3rem 0;
+  font-size: 1.4rem;
   color: slateblue;
 }
 
@@ -439,10 +439,20 @@ form input.one {
 
 div.error {
     display: table;
-    margin: 1rem 0;
-    padding: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem 2rem;
     border-radius: 2px;
-    background-color: orangered;
+    background-color: crimson;
+    color: white;
+    font-weight: bold;
+}
+
+div.errors {
+    display: table;
+    margin-bottom: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 2px;
+    background-color: crimson;
     color: white;
     font-weight: bold;
 }
@@ -498,6 +508,7 @@ nav user {
 main {
     display: block;
     padding: 2rem;
+    font-size: 1.2rem;
 }
 
 footer {
@@ -517,4 +528,49 @@ footer .right a {
 
 footer .right .fa {
     margin-right: 0.5rem;
+}
+
+.row.complete {
+  margin-bottom: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+
+.row.complete.correct {
+  border-color: limegreen;
+}
+
+.row.complete.incorrect {
+  border-color: crimson;
+}
+
+.row.complete .fa {
+  width: 1rem;
+  margin-right: 0.5rem;
+}
+
+.row.complete .empty {
+  display: inline-block;
+  width: 1rem;
+  margin-right: 0.5rem;
+}
+
+.correct-answer {
+  font-weight: bold;
+  color: green;
+}
+
+.incorrect-answer {
+  font-weight: bold;
+  color: crimson;
+  text-decoration: line-through;
+}
+
+/* Overwrite */
+
+.fa-spin {
+  -webkit-animation: fa-spin 1s infinite linear;
+  animation: fa-spin 1s infinite linear;
 }

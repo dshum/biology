@@ -28,7 +28,7 @@ export default {
   components: {
     VueTinymce
   },
-  props: ['className', 'mode', 'view', 'model'],
+  props: ['mode', 'view'],
   data () {
     return {
       value: this.view.value,
@@ -37,6 +37,7 @@ export default {
         plugins: ['lists', 'link', 'image', 'paste', 'table', 'code', 'preview'],
         width: '40rem',
         height: '20rem',
+        convert_urls: false,
         setup: editor => {
           let self = this
 

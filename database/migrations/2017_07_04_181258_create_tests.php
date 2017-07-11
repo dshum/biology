@@ -21,7 +21,7 @@ class CreateTests extends Migration
 			$table->integer('topic_id')->unsigned()->nullable()->default(null)->index();
             $table->integer('subtopic_id')->unsigned()->nullable()->default(null)->index();
 			$table->timestamps();
-			$table->softDeletes(); 
+			$table->softDeletes();
 		});
     }
 

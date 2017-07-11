@@ -248,6 +248,7 @@ class EditController extends Controller
         }
         
         $element = $currentItem->getClass();
+        $mainProperty = $currentItem->getMainProperty();
         
         $propertyList = $currentItem->getPropertyList();
 
@@ -324,6 +325,11 @@ class EditController extends Controller
                     setElement($element)->
                     set();
             }
+        }
+
+        if ($element->{$mainProperty} === 'Element') {
+            $element->{$mainProperty} = $element->getClassId();
+            $element->save();
         }
         
         UserAction::log(
