@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-Тесты ЕГЭ по биологии
+ЕГЭ по биологии
 @stop
 
 @section('content')
