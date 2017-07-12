@@ -61,7 +61,7 @@
           <transition name="switch">
             <div v-show="mode === 'tree'">
               <div class="tree">
-                <tree-folder v-on:context="onContextMenu(arguments[0], arguments[1], arguments[2])"></tree-folder>
+                <tree v-on:context="onContextMenu(arguments[0], arguments[1], arguments[2])"></tree>
               </div>
             </div>
           </transition>
@@ -127,11 +127,11 @@
 import Spinner from '@/components/common/Spinner'
 import Confirm from '@/components/common/Confirm'
 import Alert from '@/components/common/Alert'
-import TreeFolder from '../components/common/TreeFolder'
+import Tree from '../components/common/Tree'
 
 export default {
   name: 'base',
-  components: { Spinner, Confirm, Alert, TreeFolder },
+  components: { Spinner, Confirm, Alert, Tree },
   data () {
     return {
       loggedUser: null,
@@ -762,16 +762,11 @@ nav .menu ul > li span {
 }
 
 .tree > div > div[item] > .item {
+  margin: 0;
   padding-left: 0;
   font-size: 1.3rem;
   color: #37a;
   font-weight: normal;
-}
-
-.tree .padding {
-  margin-left: 0.5rem;
-  padding-left: 1rem;
-  overflow: hidden;
 }
 
 .tree .plus {
@@ -792,13 +787,6 @@ nav .menu ul > li span {
   cursor: hand;
 }
 
-.tree .empty {
-  width: 1rem;
-  height: 1rem;
-  float: left;
-  margin: 1px 0.5rem 0 0;
-}
-
 .tree .fa {
   position: relative;
   top: -2px;
@@ -806,14 +794,21 @@ nav .menu ul > li span {
   font-size: 1.5rem;
 }
 
-.tree span.go {
-  text-decoration: underline;
-  white-space: nowrap;
-  cursor: pointer;
+.tree .empty {
+  width: 1rem;
+  height: 1rem;
+  float: left;
+  margin: 1px 0.5rem 0 0;
 }
 
-.tree span.go.router-link-active {
+.tree a.router-link-active {
   color: teal;
+}
+
+.tree .padding {
+  margin-left: 0.5rem;
+  padding-left: 1rem;
+  overflow: hidden;
 }
 
 /* Context menu */

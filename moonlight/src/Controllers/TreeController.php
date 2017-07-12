@@ -17,15 +17,60 @@ use Carbon\Carbon;
 
 class TreeController extends Controller
 {
+    public function open($classId)
+    {
+        $scope = [];
+
+        $loggedUser = LoggedUser::getUser();
+
+        $open = $loggedUser->getParameter('open') ?: [];
+
+        if (! isset($open[$classId])) {
+            $open[$classId] = true;
+
+            $loggedUser->setParameter('open', $open);
+        }
+
+        $scope['opened'] = true;
+
+        return response()->json($scope);
+    }
+
+    public function close($classId)
+    {
+        $scope = [];
+
+        $loggedUser = LoggedUser::getUser();
+
+        $open = $loggedUser->getParameter('open') ?: [];
+
+        if (isset($open[$classId])) {
+            unset($open[$classId]);
+
+            $loggedUser->setParameter('open', $open);
+        }
+
+        $scope['closed'] = true;
+
+        return response()->json($scope);
+    }
+
     /**
      * Tree node content.
      * 
      * @return Response
      */
-    public function node(Request $request, $classId = null)
+    public function node($classId = null)
     {
         $scope = [];
-        
+
+        $scope['items'] = $this->items($classId);
+
+        return response()->json($scope);
+    }
+
+    protected function items($classId = null)
+    {   
         $loggedUser = LoggedUser::getUser();
 
         $element = $classId ? Element::getByClassId($classId) : null;
@@ -73,13 +118,12 @@ class TreeController extends Controller
                 'elements' => $elements,
             ];
         }
-        
-        $scope['items'] = $items;
 
-        return response()->json($scope);
+        return $items;
     }
     
-    protected function children($element) {
+    protected function children($element)
+    {
         $site = \App::make('site');
         
         $items = $site->getItemList();
@@ -351,17 +395,27 @@ class TreeController extends Controller
             ] : null;
         }
 
+        $open = $loggedUser->getParameter('open') ?: [];
+
         $elements = [];
-        
+
         foreach ($elementList as $element) {
             $children = $this->children($element);
+
+            $items = $children
+                ? $this->items($element->getClassId()) 
+                : [];
+
+            $isOpen = isset($open[$element->getClassId()])
+                ? true : false;
             
             $elements[] = [
                 'id' => $element->id,
                 'classId' => $element->getClassId(),
                 'name' => $element->{$currentItem->getMainProperty()},
                 'children' => $children,
-                'open' => true,
+                'items' => $items,
+                'open' => $isOpen,
             ];
         }
         

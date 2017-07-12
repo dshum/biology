@@ -82,9 +82,11 @@ Route::group(['prefix' => 'moonlight/api'], function() {
         
         Route::post('favorite', 'Moonlight\Controllers\HomeController@favorite');
         
-        Route::get('tree', 'Moonlight\Controllers\TreeController@node');
-        
-        Route::get('tree/{classId}', 'Moonlight\Controllers\TreeController@node');
+        Route::get('tree/{classId?}', 'Moonlight\Controllers\TreeController@node');
+
+        Route::post('tree/open/{classId}', 'Moonlight\Controllers\TreeController@open');
+
+        Route::post('tree/close/{classId}', 'Moonlight\Controllers\TreeController@close');
         
         Route::get('search/items', 'Moonlight\Controllers\SearchController@items');
         
