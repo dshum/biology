@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div v-if="!classId" class="refresh" @click="refresh()"><i class="fa fa-refresh"></i></div>
     <div item v-for="item in items">
       <div class="item">{{ item.name }}</div>
       <div class="margin" v-for="element in item.elements">
@@ -38,10 +37,18 @@ export default {
     } else {
       this.createNode()
     }
+
+    this.$eventBus.on('refreshTree', (classId) => {
+      if (this.classId === classId) {
+        this.createNode(classId)
+      }
+    })
   },
   methods: {
-    createNode () {
-      this.$http.get('/tree').then((response) => {
+    createNode (classId) {
+      let url = classId ? '/tree/' + classId : '/tree'
+
+      this.$http.get(url).then((response) => {
         let data = response.body
 
         this.items = data.items

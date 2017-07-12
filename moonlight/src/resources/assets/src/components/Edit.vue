@@ -91,6 +91,8 @@ export default {
     this.getEdit()
 
     $(document)
+      .off('keypress')
+      .off('keydown')
       .on('keypress', function (event) {
         return self.$hotkeys.onCtrlS(event, function () {
           self.save()
@@ -179,6 +181,12 @@ export default {
           this.currentElement = data.element
 
           this.$emit('updateElement', {element: data.element, parents: data.parents})
+
+          if (this.currentElement.parent) {
+            this.$eventBus.emit('refreshTree', this.currentElement.parent.classId)
+          } else {
+            this.$eventBus.emit('refreshTree', null)
+          }
         }
 
         if (data.views) {
@@ -207,6 +215,12 @@ export default {
 
           this.errorMessageAlert = true
         } else if (data.deleted) {
+          if (this.currentElement.parent) {
+            this.$eventBus.emit('refreshTree', this.currentElement.parent.classId)
+          } else {
+            this.$eventBus.emit('refreshTree', null)
+          }
+
           this.up()
         }
 

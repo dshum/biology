@@ -76,6 +76,8 @@ export default {
     this.getCreate()
 
     $(document)
+      .off('keypress')
+      .off('keydown')
       .on('keypress', function (event) {
         return self.$hotkeys.onCtrlS(event, function () {
           self.save()
@@ -163,6 +165,8 @@ export default {
         }
 
         if (data.added) {
+          this.$eventBus.emit('refreshTree', this.classId)
+
           this.up()
         }
 

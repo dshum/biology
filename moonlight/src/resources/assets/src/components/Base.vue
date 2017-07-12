@@ -345,6 +345,8 @@ export default {
           this.errorMessage = data.error
 
           this.errorMessageAlert = true
+        } else {
+          this.$eventBus.emit('refreshTree')
         }
 
         this.loading = false
