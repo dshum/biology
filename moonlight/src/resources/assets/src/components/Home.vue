@@ -1,23 +1,22 @@
 <template>
   <div>
-    <div class="plugin"></div>
+    <home-plugin></home-plugin>
   </div>
 </template>
 
 <script>
+import HomePlugin from '@/components/plugins/HomePlugin'
+
 export default {
   name: 'home',
+  components: { HomePlugin },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+
     }
   },
   created () {
     $(document).attr('title', 'Moonlight')
-
-    $.get('http://moonlight-radiant/moonlight/api/plugin', {}, function (html) {
-      $('.plugin').html(html)
-    })
   }
 }
 </script>
