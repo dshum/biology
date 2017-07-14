@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Plugins;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Validator;
 use Carbon\Carbon;
@@ -19,11 +18,21 @@ class WelcomeController extends Controller {
 	{
 		$scope = [];
 
-        $lastUsers = User::orderBy('created_at', 'desc')->limit(5)->get();
+        $lastUsers = \Cache::tags('User')->remember('lastUsers', 1440, function() {
+            return User::orderBy('created_at', 'desc')->limit(5)->get();
+        });
 
-        $userCount = User::count();
-        $testCount = Test::count();
-        $questionCount = Question::count();
+        $userCount = \Cache::tags('User')->remember('userCount', 1440, function() {
+            return User::count();
+        });
+
+        $testCount = \Cache::tags('Test')->remember('testCount', 1440, function() {
+            return Test::count();
+        });
+
+        $questionCount = \Cache::tags('Question')->remember('questionCount', 1440, function() {
+            return Question::count();
+        });
 
         $scope['lastUsers'] = [];
 
@@ -38,6 +47,8 @@ class WelcomeController extends Controller {
         $scope['userCount'] = $userCount;
         $scope['testCount'] = $testCount;
         $scope['questionCount'] = $questionCount;
+
+        \Log::info(\DB::getQueryLog());
 
 		return response()->json($scope);
 	}

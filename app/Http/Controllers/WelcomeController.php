@@ -18,15 +18,28 @@ class WelcomeController extends Controller {
 	{
 		$scope = [];
 
-		$subjects = Subject::where('hidden', false)->orderBy('order')->get();
-		$topics = Topic::where('hidden', false)->orderBy('order')->get();
-		$subtopics = Subtopic::where('hidden', false)->orderBy('order')->get();
-		$tests = Test::orderBy('order')->get();
+		$subjects = \Cache::tags('Subject')->remember('subjects', 60, function() {
+			return Subject::where('hidden', false)->orderBy('order')->get();
+		});
+
+		$topics = \Cache::tags('Topic')->remember('topics', 60, function() {
+			return Topic::where('hidden', false)->orderBy('order')->get();
+		});
+
+		$subtopics = \Cache::tags('Subtopic')->remember('subtopics', 60, function() {
+			return Subtopic::where('hidden', false)->orderBy('order')->get();
+		});
+
+		$tests = \Cache::tags('Test')->remember('tests', 60, function() {
+			return Test::orderBy('order')->get();
+		});
 
 		$scope['subjects'] = $subjects;
 		$scope['topics'] = $topics;
 		$scope['subtopics'] = $subtopics;
 		$scope['tests'] = $tests;
+
+		\Log::info(\DB::getQueryLog());
 
 		return view('welcome', $scope);
 	}

@@ -114,6 +114,10 @@ class OneToOneProperty extends BaseProperty
 			'name' => $this->getName(),
 			'title' => $this->getTitle(),
 			'value' => $value,
+			'item' => [
+				'id' => $relatedItem->getNameId(),
+				'name' => $relatedItem->getTitle(),
+			],
 		];
 
 		return $scope;
