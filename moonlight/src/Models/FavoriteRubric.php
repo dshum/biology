@@ -29,9 +29,5 @@ class FavoriteRubric extends Model {
 			$element->flush();
 		});
     }
-
-	public function flush()
-	{
-		//\Cache::tags('FavoriteRubric')->flush();
-	}
+	
 }

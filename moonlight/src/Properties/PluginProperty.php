@@ -2,7 +2,8 @@
 
 namespace Moonlight\Properties;
 
-use Moonlight\Main\ElementInterface;
+use Illuminate\Database\Eloquent\Model;
+use Moonlight\Main\Element;
 
 class PluginProperty extends BaseProperty 
 {
@@ -11,7 +12,7 @@ class PluginProperty extends BaseProperty
 		return new self($name);
 	}
 
-	public function setElement(ElementInterface $element)
+	public function setElement(Model $element)
 	{
 		$this->element = $element;
 
@@ -35,7 +36,7 @@ class PluginProperty extends BaseProperty
     public function getBrowseView()
 	{
 		$element = $this->getElement();
-        $item = $this->getItem();
+        $item = Element::getItem($element);
 		$mainProperty = $item->getMainProperty();
 
 		$scope = [
@@ -44,9 +45,8 @@ class PluginProperty extends BaseProperty
 			'value' => $this->getValue(),
 			'element' => $element ? [
                 'id' => $element->id,
-                'classId' => $element->getClassId(),
+                'classId' => Element::getClassId($element),
                 'name' => $element->{$mainProperty},
-                'trashed' => $this->isTrashed(),
             ] : null,
             'item' => [
                 'id' => $item->getNameId(),
@@ -60,7 +60,7 @@ class PluginProperty extends BaseProperty
 	public function getEditView()
 	{
         $element = $this->getElement();
-        $item = $this->getItem();
+        $item = Element::getItem($this);
 		$mainProperty = $item->getMainProperty();
 
 		$scope = [
@@ -69,9 +69,8 @@ class PluginProperty extends BaseProperty
 			'value' => $this->getValue(),
 			'element' => $element ? [
                 'id' => $element->id,
-                'classId' => $element->getClassId(),
+                'classId' => Element::getClassId($element),
                 'name' => $element->{$mainProperty},
-                'trashed' => $this->isTrashed(),
             ] : null,
             'item' => [
                 'id' => $item->getNameId(),

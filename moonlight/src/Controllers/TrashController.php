@@ -31,7 +31,13 @@ class TrashController extends Controller
         
         if ( ! $item) {
             return response()->json(['count' => 0]);
-        }        
+        }       
+
+        $traits = class_uses($item->getClass());
+
+		if ( ! isset($traits['Illuminate\Database\Eloquent\SoftDeletes'])) {
+			return response()->json(['count' => 0]);
+		}
         
         $propertyList = $item->getPropertyList();
 
@@ -118,6 +124,13 @@ class TrashController extends Controller
             $scope['message'] = 'Класс не найден.';
             return response()->json($scope);
         }
+
+        $traits = class_uses($item->getClass());
+
+		if ( ! isset($traits['Illuminate\Database\Eloquent\SoftDeletes'])) {
+			$scope['message'] = 'Класс не поддерживает удаление в корзину.';
+            return response()->json($scope);
+		}
         
         $property = $item->getPropertyByName($name);
         
@@ -158,6 +171,13 @@ class TrashController extends Controller
             $scope['message'] = 'Класс не найден.';
             return response()->json($scope);
         }
+
+        $traits = class_uses($currentItem->getClass());
+
+		if ( ! isset($traits['Illuminate\Database\Eloquent\SoftDeletes'])) {
+			$scope['message'] = 'Класс не поддерживает удаление в корзину.';
+            return response()->json($scope);
+		}
         
         $activeProperties = $loggedUser->getParameter('activeTrashProperties') ?: [];
         
@@ -201,13 +221,25 @@ class TrashController extends Controller
         $site = \App::make('site');
         
 		$itemList = $site->getItemList();
-        
-        $first = sizeof($itemList) ? array_shift($itemList) : null;
-        
-		$scope['item'] = $first ? [
-            'id' => $first->getNameId(),
-            'name' => $first->getTitle(),
-        ] : null;
+
+        $scope['item'] = null;
+
+        foreach ($itemList as $item) {
+            $class = $item->getClass();
+
+            $traits = class_uses($class);
+
+            if (
+                ! isset($traits['Illuminate\Database\Eloquent\SoftDeletes'])
+            ) continue;
+
+            $scope['item'] = [
+                'id' => $first->getNameId(),
+                'name' => $first->getTitle(),
+            ];
+
+            break;
+        }
 
 		return response()->json($scope);
 	}
@@ -223,6 +255,14 @@ class TrashController extends Controller
         $items = [];
         
         foreach ($itemList as $item) {
+            $class = $item->getClass();
+
+            $traits = class_uses($class);
+
+            if (
+                ! isset($traits['Illuminate\Database\Eloquent\SoftDeletes'])
+            ) continue;
+            
             $items[] = [
                 'id' => $item->getNameId(),
                 'name' => $item->getTitle(),

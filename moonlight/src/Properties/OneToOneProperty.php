@@ -2,8 +2,8 @@
 
 namespace Moonlight\Properties;
 
+use Illuminate\Database\Eloquent\Model;
 use Moonlight\Main\Item;
-use Moonlight\Main\ElementInterface;
 use Moonlight\Main\Element;
 
 class OneToOneProperty extends BaseProperty 
@@ -51,7 +51,7 @@ class OneToOneProperty extends BaseProperty
 		return $this->parent;
 	}
 
-	public function setElement(ElementInterface $element)
+	public function setElement(Model $element)
 	{
 		$this->element = $element;
 
@@ -106,7 +106,7 @@ class OneToOneProperty extends BaseProperty
         
         $value = $this->value ? [
             'id' => $this->value->id,
-            'classId' => $this->value->getClassId(),
+            'classId' => Element::getClassId($this->value),
             'name' => $this->value->{$mainProperty},
         ] : null;
 
@@ -133,7 +133,7 @@ class OneToOneProperty extends BaseProperty
         
         $value = $this->value ? [
             'id' => $this->value->id,
-            'classId' => $this->value->getClassId(),
+            'classId' => Element::getClassId($this->value),
             'name' => $this->value->{$mainProperty},
         ] : null;
 
@@ -159,7 +159,7 @@ class OneToOneProperty extends BaseProperty
         
         $value = $this->value ? [
             'id' => $this->value->id,
-            'classId' => $this->value->getClassId(),
+            'classId' => Element::getClassId($this->value),
             'name' => $this->value->{$mainProperty},
         ] : null;
 
@@ -185,7 +185,7 @@ class OneToOneProperty extends BaseProperty
         
         $value = $this->value ? [
             'id' => $this->value->id,
-            'classId' => $this->value->getClassId(),
+            'classId' => Element::getClassId($this->value),
             'name' => $this->value->{$mainProperty},
         ] : null;
 

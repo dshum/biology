@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 use Moonlight\Main\Site;
 use Moonlight\Main\Item;
-use Moonlight\Main\ElementInterface;
+use Moonlight\Main\Element;
 
 class Group extends Model {
 
@@ -149,13 +149,13 @@ class Group extends Model {
 		return $this->default_permission;
 	}
 
-	public function getElementAccess(ElementInterface $element)
+	public function getElementAccess(Model $element)
 	{
-		$elementPermission = $this->getElementPermission($element->getClassId());
+		$elementPermission = $this->getElementPermission(Element::getClassId($element));
 
 		if ($elementPermission) return $elementPermission->permission;
 
-		$itemPermission = $this->getItemPermission($element->getClass());
+		$itemPermission = $this->getItemPermission(Element::getClass($element));
 
 		if ($itemPermission) return $itemPermission->permission;
 

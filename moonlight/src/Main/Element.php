@@ -2,6 +2,7 @@
 
 namespace Moonlight\Main;
 
+use Illuminate\Database\Eloquent\Model;
 use Moonlight\Main\ElementInterface;
 use Moonlight\Properties\FileProperty;
 use Moonlight\Properties\ImageProperty;
@@ -11,13 +12,27 @@ final class Element
 {
 	const ID_SEPARATOR = '.';
 
-	public static function getClassId(ElementInterface $element)
+	public static function getItem(Model $element)
+	{
+		$site = \App::make('site');
+
+		$class = static::getClass($element);
+
+		return $site->getItemByName($class);
+	}
+
+	public static function getClass(Model $element)
+	{
+		return get_class($element);
+	}
+
+	public static function getClassId(Model $element)
 	{
 		return
 			str_replace(
 				'\\',
 				static::ID_SEPARATOR,
-				$element->getClass()
+				Element::getClass($element)
 			)
 			.static::ID_SEPARATOR
 			.$element->id;
@@ -79,9 +94,28 @@ final class Element
 		return null;
 	}
 
-	public static function getParent(ElementInterface $element)
+	public static function getProperty(Model $element, $name)
 	{
-		$item = $element->getItem();
+		$item = Element::getItem($element);
+
+		$property = $item->getPropertyByName($name);
+
+		return $property->setElement($element);
+	}
+
+	public static function equalTo($element1, $element2)
+	{
+		return
+			$element1 instanceof Model
+			&& $element2 instanceof Model
+			&& static::getClassId($element1) === static::getClassId($element2)
+			? true 
+			: false;
+	}
+
+	public static function getParent(Model $element)
+	{
+		$item = Element::getItem($element);
 
 		$propertyList = $item->getPropertyList();
 
@@ -139,7 +173,7 @@ final class Element
 		return null;
 	}
 
-	public static function getParentList(ElementInterface $element)
+	public static function getParentList(Model $element)
 	{
 		$parents = [];
 		$parentList = [];
@@ -148,10 +182,10 @@ final class Element
 		$count = 0;
 		$parent = self::getParent($element);
 
-		while ($count < 100 && $parent instanceof ElementInterface) {
-			if (isset($exists[$parent->getClassId()])) break;
+		while ($count < 100 && $parent instanceof Model) {
+			if (isset($exists[static::getClassId($parent)])) break;
 			$parents[] = $parent;
-			$exists[$parent->getClassId()] = $parent->getClassId();
+			$exists[static::getClassId($parent)] = static::getClassId($parent);
 			$parent = self::getParent($parent);
 			$count++;
 		}
@@ -165,9 +199,25 @@ final class Element
 		return $parentList;
 	}
 
-	public static function copy(ElementInterface $element)
+	public static function setParent(Model $element, Model $parent)
 	{
-		$item = $element->getItem();
+		$item = Element::getItem($element);
+
+		$propertyList = $item->getPropertyList();
+
+		foreach ($propertyList as $propertyName => $property) {
+			if (
+				$property->isOneToOne()
+				&& $property->getRelatedClass() == static::getClass($parent)
+			) {
+				$element->$propertyName = $parent->id;
+			}
+		}
+	}
+
+	public static function copy(Model $element)
+	{
+		$item = Element::getItem($element);
 
 		$propertyList = $item->getPropertyList();
 
@@ -197,16 +247,16 @@ final class Element
 
 		$clone->save();
 
-		\Cache::tags($element->getClass())->flush();
+		\Cache::tags(Element::getClass($element))->flush();
 
 		return $clone;
 	}
 
-	public static function delete(ElementInterface $element)
+	public static function delete(Model $element)
 	{
 		$site = \App::make('site');
 
-		$class = $element->getClass();
+		$class = Element::getClass($element);
 
 		$itemList = $site->getItemList();
 
@@ -230,20 +280,20 @@ final class Element
 
 		$element->delete();
 
-		\Cache::tags($element->getClass())->flush();
+		\Cache::tags(Element::getClass($element))->flush();
 
-		\Cache::forget("getByClassId({$element->getClassId()})");
+		\Cache::forget("getByClassId({Element::getClassId($element)})");
 
-		\Cache::forget("getWithTrashedByClassId({$element->getClassId()})");
+		\Cache::forget("getWithTrashedByClassId({Element::getClassId($element)})");
 
-		\Cache::forget("getOnlyTrashedByClassId({$element->getClassId()})");
+		\Cache::forget("getOnlyTrashedByClassId({Element::getClassId($element)})");
 
 		return true;
 	}
 
 	public static function deleteFromTrash(ElementInterface $element)
 	{
-		$item = $element->getItem();
+		$item = Element::getItem($element);
 
 		$propertyList = $item->getPropertyList();
 
@@ -253,43 +303,43 @@ final class Element
 
 		$element->forceDelete();
 
-		\Cache::tags($element->getClass())->flush();
+		\Cache::tags(Element::getClass($element))->flush();
 
-		\Cache::forget("getByClassId({$element->getClassId()})");
+		\Cache::forget("getByClassId({Element::getClassId($element)})");
 
-		\Cache::forget("getWithTrashedByClassId({$element->getClassId()})");
+		\Cache::forget("getWithTrashedByClassId({Element::getClassId($element)})");
 
-		\Cache::forget("getOnlyTrashedByClassId({$element->getClassId()})");
+		\Cache::forget("getOnlyTrashedByClassId({Element::getClassId($element)})");
 
 		return true;
 	}
 
-	public static function restore(ElementInterface $element)
+	public static function restore(Model $element)
 	{
 		$element->restore();
 
-		\Cache::tags($element->getClass())->flush();
+		\Cache::tags(Element::getClass($element))->flush();
 
-		\Cache::forget("getByClassId({$element->getClassId()})");
+		\Cache::forget("getByClassId({Element::getClassId($element)})");
 
-		\Cache::forget("getWithTrashedByClassId({$element->getClassId()})");
+		\Cache::forget("getWithTrashedByClassId({Element::getClassId($element)})");
 
-		\Cache::forget("getOnlyTrashedByClassId({$element->getClassId()})");
+		\Cache::forget("getOnlyTrashedByClassId({Element::getClassId($element)})");
 
 		return true;
 	}
 
-	public static function save(ElementInterface $element)
+	public static function save(Model $element)
 	{
 		$element->save();
 
-		\Cache::tags($element->getClass())->flush();
+		\Cache::tags(Element::getClass($element))->flush();
 
-		\Cache::forget("getByClassId({$element->getClassId()})");
+		\Cache::forget("getByClassId({Element::getClassId($element)})");
 
-		\Cache::forget("getWithTrashedByClassId({$element->getClassId()})");
+		\Cache::forget("getWithTrashedByClassId({Element::getClassId($element)})");
 
-		\Cache::forget("getOnlyTrashedByClassId({$element->getClassId()})");
+		\Cache::forget("getOnlyTrashedByClassId({Element::getClassId($element)})");
 
 		return true;
 	}

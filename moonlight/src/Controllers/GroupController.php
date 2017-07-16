@@ -71,7 +71,7 @@ class GroupController extends Controller {
             if ( ! sizeof ($elementList)) continue;
 
             foreach ($elementList as $element) {
-                $itemElementList[$item->getName()][$element->getClassId()] = $element->getClassId();
+                $itemElementList[$item->getName()][Element::getClassId($element)] = Element::getClassId($element);
             }
         }
 

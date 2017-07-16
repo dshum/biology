@@ -2,7 +2,7 @@
 
 namespace Moonlight\Properties;
 
-use Moonlight\Main\ElementInterface;
+use Illuminate\Database\Eloquent\Model;
 
 class CheckboxProperty extends BaseProperty {
 
@@ -11,7 +11,7 @@ class CheckboxProperty extends BaseProperty {
 		return new self($name);
 	}
 
-	public function setElement(ElementInterface $element)
+	public function setElement(Model $element)
 	{
 		$this->element = $element;
 

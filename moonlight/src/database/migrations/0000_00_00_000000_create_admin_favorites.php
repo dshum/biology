@@ -12,10 +12,11 @@ class CreateAdminFavorites extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('admin_favorites', function (Blueprint $table) {
+		Schema::create('admin_favorites', function (Blueprint $table)
+		{
 			$table->increments('id');
 			$table->integer('user_id')->unsigned()->index();
-            $table->integer('rubric_id')->unsigned()->index();
+			$table->integer('rubric_id')->unsigned()->index();
 			$table->string('class_id');
             $table->integer('order');
 			$table->timestamps();

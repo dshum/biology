@@ -3,8 +3,8 @@
 namespace Moonlight\Properties;
 
 use Log;
+use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Moonlight\Main\ElementInterface;
 
 class DatetimeProperty extends BaseProperty
 {
@@ -37,7 +37,7 @@ class DatetimeProperty extends BaseProperty
 		return $this->fillNow;
 	}
 
-	public function setElement(ElementInterface $element)
+	public function setElement(Model $element)
 	{
 		parent::setElement($element);
 

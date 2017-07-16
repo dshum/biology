@@ -3,7 +3,7 @@
 namespace Moonlight\Properties;
 
 use Illuminate\Support\Facades\Log;
-use Moonlight\Main\ElementInterface;
+use Illuminate\Database\Eloquent\Model;
 use Moonlight\Main\Item;
 
 class OrderProperty extends BaseProperty
@@ -39,7 +39,7 @@ class OrderProperty extends BaseProperty
 
 	public function set()
 	{   
-		if ( ! $this->element instanceof ElementInterface) return $this;
+		if ( ! $this->element instanceof Model) return $this;
 
 		$name = $this->getName();
 

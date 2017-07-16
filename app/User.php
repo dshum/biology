@@ -4,12 +4,11 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Moonlight\Main\ElementInterface;
-use Moonlight\Main\ElementTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable implements ElementInterface
+class User extends Authenticatable
 {
-    use ElementTrait;
+    use SoftDeletes;
     use Notifiable;
 
     /**

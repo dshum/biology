@@ -680,7 +680,7 @@ nav .menu ul > li span {
     padding: 0 0 0.5rem 0.25rem;
 }
 
-.sidebar .block-elements ul > li.router-link-active {
+.sidebar .block-elements ul > li a.router-link-active {
     color: teal;
 }
 

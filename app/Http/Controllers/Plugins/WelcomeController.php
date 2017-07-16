@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Plugins;
 use Illuminate\Http\Request;
 use Validator;
 use Carbon\Carbon;
+use Moonlight\Main\Element;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Topic;
@@ -39,7 +40,7 @@ class WelcomeController extends Controller {
         foreach ($lastUsers as $lastUser) {
             $scope['lastUsers'][] = [
                 'id' => $lastUser->id,
-                'classId' => $lastUser->getClassId(),
+                'classId' => Element::getClassId($lastUser),
                 'email' => $lastUser->email,
             ];
         }
@@ -47,8 +48,6 @@ class WelcomeController extends Controller {
         $scope['userCount'] = $userCount;
         $scope['testCount'] = $testCount;
         $scope['questionCount'] = $questionCount;
-
-        \Log::info(\DB::getQueryLog());
 
 		return response()->json($scope);
 	}

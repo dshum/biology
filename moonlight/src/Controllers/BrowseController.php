@@ -60,7 +60,7 @@ class BrowseController extends Controller
                 $element = Element::getByClassId($classId);
                 
                 if ($element && $loggedUser->hasUpdateAccess($element)) {
-                    $item = $element->getItem();
+                    $item = Element::getItem($element);
                     if ($item->getOrderProperty()) {
                         $element->{$item->getOrderProperty()} = $order;
                         $element->save();
@@ -111,7 +111,7 @@ class BrowseController extends Controller
         }
 
         foreach ($elements as $element) {
-            $elementItem = $element->getItem();
+            $elementItem = Element::getItem($element);
             $propertyList = $elementItem->getPropertyList();
             
             $clone = new $element;
@@ -150,7 +150,7 @@ class BrowseController extends Controller
 
             $clone->save();
             
-            $scope['copied'][] = $clone->getClassId();
+            $scope['copied'][] = Element::getClassId($clone);
         }
         
         if (isset($scope['copied'])) {
@@ -200,7 +200,7 @@ class BrowseController extends Controller
         }
 
         foreach ($elements as $element) {
-            $elementItem = $element->getItem();
+            $elementItem = Element::getItem($element);
             $propertyList = $elementItem->getPropertyList();
             
             $changed = false;
@@ -225,7 +225,7 @@ class BrowseController extends Controller
             if ($changed) {
                 $element->save();
                 
-                $scope['moved'][] = $element->getClassId();
+                $scope['moved'][] = Element::getClassId($element);
             }
         }
         
@@ -279,8 +279,8 @@ class BrowseController extends Controller
         $itemList = $site->getItemList();
         
         foreach ($elements as $element) {
-            $elementItem = $element->getItem();
-            $className = $element->getClass();
+            $elementItem = Element::getItem($element);
+            $className = Element::getClass($element);
             
             foreach ($itemList as $item) {
                 $itemName = $item->getName();
@@ -312,7 +312,7 @@ class BrowseController extends Controller
         
         foreach ($elements as $element) {
             if ($element->delete()) {
-                $scope['deleted'][] = $element->getClassId();
+                $scope['deleted'][] = Element::getClassId($element);
             }
         }
         
@@ -362,7 +362,7 @@ class BrowseController extends Controller
         }
         
         foreach ($elements as $element) {
-            $item = $element->getItem();
+            $item = Element::getItem($element);
 
             $propertyList = $item->getPropertyList();
 
@@ -372,7 +372,7 @@ class BrowseController extends Controller
 
             $element->forceDelete();
             
-            $scope['deleted'][] = $element->getClassId();
+            $scope['deleted'][] = Element::getClassId($element);
         }
         
         if (isset($scope['deleted'])) {
@@ -423,7 +423,7 @@ class BrowseController extends Controller
         foreach ($elements as $element) {
             $element->restore();
             
-            $scope['restored'][] = $element->getClassId();
+            $scope['restored'][] = Element::getClassId($element);
         }
         
         if (isset($scope['restored'])) {
@@ -473,7 +473,7 @@ class BrowseController extends Controller
 			foreach ($propertyList as $propertyName => $property) {
 				if (
 					($property->isOneToOne() || $property->isManyToMany())
-					&& $property->getRelatedClass() == $element->getClass()
+					&& $property->getRelatedClass() == Element::getClass($element)
 				) {
                     $flag = true;
                 }
@@ -538,7 +538,7 @@ class BrowseController extends Controller
                     if (
                         $element
                         && $property->isOneToOne()
-                        && $property->getRelatedClass() == $element->getClass()
+                        && $property->getRelatedClass() == Element::getClass($element)
                     ) {
                         $query->orWhere(
                             $property->getName(), $element->id
@@ -559,7 +559,7 @@ class BrowseController extends Controller
             if (
                 $element
                 && $property->isManyToMany()
-                && $property->getRelatedClass() == $element->getClass()
+                && $property->getRelatedClass() == Element::getClass($element)
             ) {
                 $criteria = $element->{$property->getRelatedMethod()}();
                 break;
@@ -614,7 +614,7 @@ class BrowseController extends Controller
         $element = Element::getByClassId($classId);
         
         $lists = $loggedUser->getParameter('lists');
-        $cid = $element ? $element->getClassId() : Site::ROOT;
+        $cid = $element ? Element::getClassId($element) : Site::ROOT;
         $lists[$cid][$item->getNameId()] = true;
         $loggedUser->setParameter('lists', $lists);
 
@@ -646,7 +646,7 @@ class BrowseController extends Controller
         $element = Element::getByClassId($classId);
         
         $lists = $loggedUser->getParameter('lists');
-        $cid = $element ? $element->getClassId() : Site::ROOT;
+        $cid = $element ? Element::getClassId($element) : Site::ROOT;
         $lists[$cid][$item->getNameId()] = false;
         $loggedUser->setParameter('lists', $lists);
 
@@ -680,7 +680,7 @@ class BrowseController extends Controller
         $element = Element::getByClassId($classId);
         
         $lists = $loggedUser->getParameter('lists');
-        $cid = $element ? $element->getClassId() : Site::ROOT;
+        $cid = $element ? Element::getClassId($element) : Site::ROOT;
         $lists[$cid][$item->getNameId()] = true;
         $loggedUser->setParameter('lists', $lists);
         
@@ -693,7 +693,7 @@ class BrowseController extends Controller
         
         $loggedUser = LoggedUser::getUser();
         
-        $classId = $element ? $element->getClassId() : null;
+        $classId = $element ? Element::getClassId($element) : null;
         
         $propertyList = $currentItem->getPropertyList();
 
@@ -751,7 +751,7 @@ class BrowseController extends Controller
                     if (
                         $element
                         && $property->isOneToOne()
-                        && $property->getRelatedClass() == $element->getClass()
+                        && $property->getRelatedClass() == Element::getClass($element)
                     ) {
                         $query->orWhere(
                             $property->getName(), $element->id
@@ -772,7 +772,7 @@ class BrowseController extends Controller
             if (
                 $element
                 && $property->isManyToMany()
-                && $property->getRelatedClass() == $element->getClass()
+                && $property->getRelatedClass() == Element::getClass($element)
             ) {
                 $criteria = $element->{$property->getRelatedMethod()}();
                 break;
@@ -847,7 +847,7 @@ class BrowseController extends Controller
             
             $elements[] = [
                 'id' => $element->id,
-                'classId' => $element->getClassId(),
+                'classId' => Element::getClassId($element),
                 'name' => $element->{$currentItem->getMainProperty()},
                 'views' => $views,
             ];
@@ -967,7 +967,7 @@ class BrowseController extends Controller
         foreach ($elements as $element) {
             $scope['suggestions'][] = [
                 'value' => $element->$mainProperty,
-                'classId' => $element->getClassId(),
+                'classId' => Element::getClassId($element),
                 'id' => $element->id,
             ];
         }
@@ -993,7 +993,7 @@ class BrowseController extends Controller
             return response()->json($scope);
         }
         
-        $currentItem = $element->getItem();
+        $currentItem = Element::getItem($element);
         
         $parent = Element::getParent($element);
         
@@ -1002,25 +1002,23 @@ class BrowseController extends Controller
         $parents = [];
         
         foreach ($parentList as $parent) {
-            $parentItem = $parent->getItem();
+            $parentItem = Element::getItem($parent);
             $parentMainProperty = $parentItem->getMainProperty();
             $parents[] = [
                 'id' => $parent->id,
-                'classId' => $parent->getClassId(),
+                'classId' => Element::getClassId($parent),
                 'name' => $parent->{$parentMainProperty}
             ];
         }
-        
-        $favorite = Favorite::where('class_id', $classId)->first();
 
         $scope['element'] = [
             'id' => $element->id,
-            'classId' => $element->getClassId(),
+            'classId' => Element::getClassId($element),
             'parent' => $parent
                 ? [
                     'id' => $parent->id,
-                    'classId' => $parent->getClassId(),
-                    'name' => $parent->{$parent->getItem()->getMainProperty()},
+                    'classId' => Element::getClassId($parent),
+                    'name' => $parent->{Element::getItem($parent)->getMainProperty()},
                 ] : null,
             'name' => $element->{$currentItem->getMainProperty()},
             'created_at' => $element->created_at->format('c'),
@@ -1032,11 +1030,6 @@ class BrowseController extends Controller
             'id' => $currentItem->getNameId(),
             'name' => $currentItem->getTitle(),
         ];
-        
-        $scope['favorite'] = $favorite ? [
-            'id' => $favorite->id,
-            'class_id' => $favorite->class_id,
-        ] : null;
             
         return response()->json($scope);
     }
@@ -1061,7 +1054,7 @@ class BrowseController extends Controller
             return response()->json($scope);
         }
         
-        $currentItem = $element->getItem();
+        $currentItem = Element::getItem($element);
         
         $site = \App::make('site');
         
@@ -1071,7 +1064,7 @@ class BrowseController extends Controller
         
         foreach ($site->getBinds() as $name => $classes) {
             if (
-                $name == $element->getClassId() 
+                $name == Element::getClassId($element) 
                 || $name == $currentItem->getNameId()
             ) {
                 foreach ($classes as $class) {
@@ -1095,7 +1088,7 @@ class BrowseController extends Controller
             foreach ($propertyList as $property) {
                 if (
                     $property->isOneToOne()
-                    && $property->getRelatedClass() == $element->getClass()
+                    && $property->getRelatedClass() == Element::getClass($element)
                 ) {
                     $defaultOpen = $property->getOpenItem();
                     
@@ -1120,7 +1113,7 @@ class BrowseController extends Controller
                     break;
                 } elseif (
                     $property->isManyToMany()
-                    && $property->getRelatedClass() == $element->getClass()
+                    && $property->getRelatedClass() == Element::getClass($element)
                 ) {
                     $defaultOpen = $property->getOpenItem();
                     

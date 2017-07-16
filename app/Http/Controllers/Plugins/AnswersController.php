@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Validator;
 use Carbon\Carbon;
+use Moonlight\Main\Element;
 use App\Http\Controllers\Controller;
 use App\Question;
 use App\Answer;
@@ -39,7 +40,7 @@ class AnswersController extends Controller {
         foreach ($answers as $answer) {
             $scope['answers'][] = [
                 'id' => $answer->id,
-                'classId' => $answer->getClassId(),
+                'classId' => Element::getClassId($answer),
                 'answer' => $answer->answer,
                 'correct' => $answer->correct,
             ];
@@ -67,7 +68,7 @@ class AnswersController extends Controller {
         foreach ($answers as $answer) {
             $scope['answers'][] = [
                 'id' => $answer->id,
-                'classId' => $answer->getClassId(),
+                'classId' => Element::getClassId($answer),
                 'answer' => $answer->answer,
                 'correct' => $answer->correct,
             ];

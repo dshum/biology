@@ -12,7 +12,8 @@ class CreateAdminGroupItemPermissions extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('admin_group_item_permissions', function (Blueprint $table) {
+		Schema::create('admin_group_item_permissions', function (Blueprint $table)
+		{
 			$table->increments('id');
 			$table->integer('group_id')->unsigned()->index();
 			$table->string('class')->index();

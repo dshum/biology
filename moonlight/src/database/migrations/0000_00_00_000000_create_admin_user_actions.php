@@ -12,7 +12,8 @@ class CreateAdminUserActions extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('admin_user_actions', function (Blueprint $table) {
+		Schema::create('admin_user_actions', function (Blueprint $table)
+		{
 			$table->increments('id');
 			$table->integer('user_id')->unsigned()->index();
 			$table->string('action_type_id')->index();

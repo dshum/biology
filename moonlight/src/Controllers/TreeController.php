@@ -90,7 +90,7 @@ class TreeController extends Controller
                 foreach ($propertyList as $property) {
                     if (
                         $property->isOneToOne()
-                        && $property->getRelatedClass() == $element->getClass()
+                        && $property->getRelatedClass() == Element::getClass($element)
                     ) {
                         $itemList[] = $item;
                         break;
@@ -138,7 +138,7 @@ class TreeController extends Controller
             foreach ($propertyList as $property) {
                 if (
                     $property->isOneToOne()
-                    && $property->getRelatedClass() == $element->getClass()
+                    && $property->getRelatedClass() == Element::getClass($element)
                 ) {
                     $itemList[] = $item;
                     break;
@@ -161,7 +161,7 @@ class TreeController extends Controller
         
         $loggedUser = LoggedUser::getUser();
         
-        $classId = $element ? $element->getClassId() : null;
+        $classId = $element ? Element::getClassId($element) : null;
         
         $propertyList = $currentItem->getPropertyList();
 
@@ -219,7 +219,7 @@ class TreeController extends Controller
                     if (
                         $element
                         && $property->isOneToOne()
-                        && $property->getRelatedClass() == $element->getClass()
+                        && $property->getRelatedClass() == Element::getClass($element)
                     ) {
                         $query->orWhere(
                             $property->getName(), $element->id
@@ -263,7 +263,7 @@ class TreeController extends Controller
         
         $loggedUser = LoggedUser::getUser();
         
-        $classId = $element ? $element->getClassId() : null;
+        $classId = $element ? Element::getClassId($element) : null;
         
         $propertyList = $currentItem->getPropertyList();
 
@@ -321,7 +321,7 @@ class TreeController extends Controller
                     if (
                         $element
                         && $property->isOneToOne()
-                        && $property->getRelatedClass() == $element->getClass()
+                        && $property->getRelatedClass() == Element::getClass($element)
                     ) {
                         $query->orWhere(
                             $property->getName(), $element->id
@@ -342,7 +342,7 @@ class TreeController extends Controller
             if (
                 $element
                 && $property->isManyToMany()
-                && $property->getRelatedClass() == $element->getClass()
+                && $property->getRelatedClass() == Element::getClass($element)
             ) {
                 $criteria = $element->{$property->getRelatedMethod()}();
                 break;
@@ -403,15 +403,15 @@ class TreeController extends Controller
             $children = $this->children($element);
 
             $items = $children
-                ? $this->items($element->getClassId()) 
+                ? $this->items(Element::getClassId($element)) 
                 : [];
 
-            $isOpen = isset($open[$element->getClassId()])
+            $isOpen = isset($open[Element::getClassId($element)])
                 ? true : false;
             
             $elements[] = [
                 'id' => $element->id,
-                'classId' => $element->getClassId(),
+                'classId' => Element::getClassId($element),
                 'name' => $element->{$currentItem->getMainProperty()},
                 'children' => $children,
                 'items' => $items,

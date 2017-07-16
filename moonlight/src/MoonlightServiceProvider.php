@@ -29,7 +29,7 @@ class MoonlightServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/database/migrations' => $this->app->databasePath().'/migrations',
             __DIR__.'/database/seeds' => $this->app->databasePath().'/seeds',
-            __DIR__.'/resources/assets/dist' => public_path('moonlight'),
+            __DIR__.'/resources/assets/dist' => public_path('admin'),
         ]);
         
         DB::enableQueryLog(); 

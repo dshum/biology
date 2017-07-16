@@ -39,8 +39,6 @@ class WelcomeController extends Controller {
 		$scope['subtopics'] = $subtopics;
 		$scope['tests'] = $tests;
 
-		\Log::info(\DB::getQueryLog());
-
 		return view('welcome', $scope);
 	}
 

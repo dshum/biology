@@ -405,7 +405,7 @@ class SearchController extends Controller
             
             $elements[] = [
                 'id' => $element->id,
-                'classId' => $element->getClassId(),
+                'classId' => Element::getClassId($element),
                 'name' => $element->{$currentItem->getMainProperty()},
                 'views' => $views,
             ];

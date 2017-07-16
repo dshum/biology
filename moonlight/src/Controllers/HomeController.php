@@ -187,7 +187,7 @@ class HomeController extends Controller
             
             if ( ! $element) continue;
             
-            $item = $element->getItem();
+            $item = Element::getItem($element);
             $mainProperty = $item->getMainProperty();
             
             $favorites[$favorite->rubric_id][] = [

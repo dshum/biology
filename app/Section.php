@@ -3,13 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Moonlight\Main\ElementInterface;
-use Moonlight\Main\ElementTrait;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Section extends Model implements ElementInterface
+class Section extends Model
 {
-    use ElementTrait;
+    use SoftDeletes;
 
     public function getHref()
 	{

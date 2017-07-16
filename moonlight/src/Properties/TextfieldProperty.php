@@ -15,7 +15,7 @@ class TextfieldProperty extends BaseProperty
         
 		$request = $this->getRequest();
         $name = $this->getName();
-        $relatedItem = $this->getItem();
+        $relatedItem = Element::getItem($this);
         $relatedClass = $this->getItemClass();
         $mainProperty = $relatedItem->getMainProperty();
 

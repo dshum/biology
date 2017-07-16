@@ -3,9 +3,10 @@
 namespace Moonlight\Properties;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Moonlight\Main\Item;
-use Moonlight\Main\ElementInterface;
+use Moonlight\Main\Element;
 
 abstract class BaseProperty
 {
@@ -181,11 +182,12 @@ abstract class BaseProperty
 		return $this->openItem;
 	}
 
-	public function setElement(ElementInterface $element)
+	public function setElement(Model $element)
 	{
 		$this->element = $element;
 		$this->value = $element->{$this->getName()};
-		$this->trashed = $element->trashed();
+		$this->trashed = method_exists($element, 'trashed') 
+			? $element->trashed() : false;
 
 		return $this;
 	}
@@ -272,7 +274,7 @@ abstract class BaseProperty
 
 		if ($this->isMainProperty() && ! $value) {
 			$this->element->$name = $this->element->id
-				? $this->element->getClassId()
+				? Element::getClassId($this->element)
 				: 'Element';
 		}
 
@@ -284,7 +286,7 @@ abstract class BaseProperty
 	public function getBrowseView()
 	{
 		$element = $this->getElement();
-		$classId = $element ? $element->getClassId() : null;
+		$classId = $element ? Element::getClassId($element) : null;
 
 		$scope = [
             'name' => $this->getName(),

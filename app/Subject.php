@@ -3,10 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Moonlight\Main\ElementInterface;
-use Moonlight\Main\ElementTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Subject extends Model implements ElementInterface
+class Subject extends Model
 {
-    use ElementTrait;
+    use SoftDeletes;
 }

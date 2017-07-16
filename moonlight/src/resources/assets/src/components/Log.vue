@@ -57,7 +57,8 @@
               <li v-for="action in actions[page]">
                 <div class="avatar"><img :src="action.user.avatar ? action.user.avatar : 'static/img/default-avatar.png'" /></div>
                 <div class="date">{{ action.created_at | date('DD.MM.YYYY')}}<br><span class="time">{{action.created_at | date('HH:mm:ss') }}</span></div>
-                <span class="user">{{ action.user.login }}</span> <small>{{ action.user.first_name }} {{action.user.last_name }}</small><br>
+                <span class="user">{{ action.user.login }}</span>
+                <small>{{ action.user.first_name }} {{action.user.last_name }}</small><br>
                 <span class="title">{{ action.action_type_name }}</span> <span>{{ action.comments }}</span>
               </li>
             </ul>
@@ -198,7 +199,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .log.search-form-params input[type="text"] {
     width: 10rem;
 }
@@ -221,6 +222,7 @@ ul.log {
 }
 
 ul.log li {
+  min-height: 3rem;
   border-bottom: 1px solid #ccc;
 }
 
@@ -247,10 +249,9 @@ ul.log li .date .time {
   color: #666;
 }
 
-ul.log li .avatar {
+ul.log li div.avatar {
   float: left;
-  margin-top: 0.1rem;
-  padding-right: 1rem;
+  margin-right: 1rem;
 }
 
 ul.log li .avatar img {

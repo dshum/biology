@@ -55,7 +55,7 @@ class PermissionController extends Controller
             return response()->json($scope);
         }
         
-        $item = $element->getItem();
+        $item = Element::getItem($element);
         
         $defaultPermission = $group->default_permission;
         $itemPermissions = $group->itemPermissions;
@@ -147,7 +147,7 @@ class PermissionController extends Controller
         foreach ($elementList as $element) {
             $elements[] = [
                 'id' => $element->id,
-                'classId' => $element->getClassId(),
+                'classId' => Element::getClassId($element),
                 'name' => $element->{$item->getMainProperty()},
             ];
         }
@@ -172,7 +172,7 @@ class PermissionController extends Controller
         
         foreach ($elementList as $element) {
             $class = $item->getNameId();
-            $classId = $element->getClassId();
+            $classId = Element::getClassId($element);
             
             if (isset($permissions[$classId])) continue;
             

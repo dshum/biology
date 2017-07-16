@@ -3,8 +3,8 @@
 namespace Moonlight\Properties;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
 use Moonlight\Main\Item;
-use Moonlight\Main\ElementInterface;
 use Moonlight\Main\Element;
 
 class ManyToManyProperty extends BaseProperty 
@@ -63,7 +63,7 @@ class ManyToManyProperty extends BaseProperty
 		return $this->list;
 	}
     
-    public function setElement(ElementInterface $element)
+    public function setElement(Model $element)
 	{
         $site = \App::make('site');
         
@@ -111,7 +111,7 @@ class ManyToManyProperty extends BaseProperty
 		foreach ($list as $element) {
             $elements[] = [
                 'id' => $element->id,
-                'classId' => $element->getClassId(),
+                'classId' => Element::getClassId($element),
                 'name' => $element->{$mainProperty},
             ];
         }
@@ -139,7 +139,7 @@ class ManyToManyProperty extends BaseProperty
 		foreach ($list as $element) {
             $elements[] = [
                 'id' => $element->id,
-                'classId' => $element->getClassId(),
+                'classId' => Element::getClassId($element),
                 'name' => $element->{$mainProperty},
             ];
         }

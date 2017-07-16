@@ -22,7 +22,7 @@ trait ElementTrait
 
 	public function setParent(ElementInterface $parent)
 	{
-		$item = $this->getItem();
+		$item = Element::getItem($this);
 
 		$propertyList = $item->getPropertyList();
 
@@ -63,7 +63,7 @@ trait ElementTrait
 
 	public function getProperty($name)
 	{
-		$item = $this->getItem();
+		$item = Element::getItem($this);
 
 		$property = $item->getPropertyByName($name);
 
@@ -74,7 +74,7 @@ trait ElementTrait
 	{
 		return
 			$element instanceof ElementInterface
-			&& $this->getClassId() == $element->getClassId()
+			&& Element::getClassId($this) == Element::getClassId($element)
 			? true : false;
 	}
 

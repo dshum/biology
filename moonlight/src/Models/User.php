@@ -173,7 +173,7 @@ class User extends Model {
 		return false;
 	}
 
-	public function hasViewAccess(ElementInterface $element)
+	public function hasViewAccess(Model $element)
 	{
 		if ($this->isSuperUser()) return true;
 
@@ -189,7 +189,7 @@ class User extends Model {
 		return false;
 	}
 
-	public function hasUpdateAccess(ElementInterface $element)
+	public function hasUpdateAccess(Model $element)
 	{
 		if ($this->isSuperUser()) return true;
 
@@ -205,7 +205,7 @@ class User extends Model {
 		return false;
 	}
 
-	public function hasDeleteAccess(ElementInterface $element)
+	public function hasDeleteAccess(Model $element)
 	{
 		if ($this->isSuperUser()) return true;
 

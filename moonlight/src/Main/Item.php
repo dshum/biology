@@ -41,23 +41,19 @@ class Item
 
 	public static function assertClass($name)
 	{
-		$implements = class_implements($name);
+		$parents = class_parents($name);
 
-		if ( ! isset($implements['Moonlight\Main\ElementInterface'])) {
-			throw new \Exception(
-				"Class $name must implement interface"
-				." Moonlight\Main\ElementInterface."
-			);
+		if ( ! isset($parents['Illuminate\Database\Eloquent\Model'])) {
+			throw new \Exception("Class $name must extend class Illuminate\Database\Eloquent\Model.");
 		}
 
+		/*
 		$traits = class_uses($name);
 
-		if ( ! isset($traits['Moonlight\Main\ElementTrait'])) {
-			throw new \Exception(
-				"Class $name must use trait"
-				." Moonlight\Main\ElementTrait."
-			);
+		if ( ! isset($traits['Illuminate\Database\Eloquent\SoftDeletes'])) {
+			throw new \Exception("Class $name must use trait Illuminate\Database\Eloquent\SoftDeletes.");
 		}
+		*/
 	}
 
 	public function setName($name)

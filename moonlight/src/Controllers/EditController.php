@@ -9,7 +9,7 @@ use Moonlight\Main\LoggedUser;
 use Moonlight\Main\Element;
 use Moonlight\Main\UserActionType;
 use Moonlight\Models\UserAction;
-use Moonlight\Models\Favorite;
+use Moonlight\Models\Tag;
 use Moonlight\Properties\OrderProperty;
 use Moonlight\Properties\FileProperty;
 use Moonlight\Properties\ImageProperty;
@@ -47,7 +47,7 @@ class EditController extends Controller
 
 		$site = \App::make('site');
 
-		$currentItem = $site->getItemByName($element->getClass());
+		$currentItem = $site->getItemByName(Element::getClass($element));
 
 		$propertyList = $currentItem->getPropertyList();
 
@@ -87,10 +87,10 @@ class EditController extends Controller
 
 		UserAction::log(
 			UserActionType::ACTION_TYPE_COPY_ELEMENT_ID,
-			$element->getClassId().' -> '.$clone->getClassId()
+			Element::getClassId($element).' -> '.Element::getClassId($clone)
 		);
 
-		$scope['copied'] = $clone->getClassId();
+		$scope['copied'] = Element::getClassId($clone);
         
         return response()->json($scope);
     }
@@ -124,7 +124,7 @@ class EditController extends Controller
 
 		$site = \App::make('site');
 
-		$currentItem = $site->getItemByName($element->getClass());
+		$currentItem = $site->getItemByName(Element::getClass($element));
 
 		$propertyList = $currentItem->getPropertyList();
         
@@ -151,11 +151,11 @@ class EditController extends Controller
 
             UserAction::log(
                 UserActionType::ACTION_TYPE_MOVE_ELEMENT_ID,
-                $element->getClassId()
+                Element::getClassId($element)
             );
         }
 
-		$scope['moved'] = $element->getClassId();
+		$scope['moved'] = Element::getClassId($element);
         
         return response()->json($scope);
     }
@@ -187,7 +187,7 @@ class EditController extends Controller
         
         $site = \App::make('site');
 
-		$className = $element->getClass();
+		$className = Element::getClass($element);
         
         $itemList = $site->getItemList();
 
@@ -216,10 +216,10 @@ class EditController extends Controller
         if ($element->delete()) {
             UserAction::log(
                 UserActionType::ACTION_TYPE_DROP_ELEMENT_TO_TRASH_ID,
-                $element->getClassId()
+                Element::getClassId($element)
             );
 
-            $scope['deleted'] = $element->getClassId();
+            $scope['deleted'] = Element::getClassId($element);
         } else {
             $scope['error'] = 'Не удалось удалить элемент.';
         }
@@ -261,8 +261,10 @@ class EditController extends Controller
 				$property->getHidden()
 				|| $property->getReadonly()
 			) continue;
-            
-            $input[$propertyName] = $property->setRequest($request)->buildInput();
+
+            $value = $property->setRequest($request)->buildInput();
+
+            if ($value) $input[$propertyName] = $value;
 
 			foreach ($property->getRules() as $rule => $message) {
 				$rules[$propertyName][] = $rule;
@@ -328,16 +330,16 @@ class EditController extends Controller
         }
 
         if ($element->{$mainProperty} === 'Element') {
-            $element->{$mainProperty} = $element->getClassId();
+            $element->{$mainProperty} = Element::getClassId($element);
             $element->save();
         }
         
         UserAction::log(
 			UserActionType::ACTION_TYPE_ADD_ELEMENT_ID,
-			$element->getClassId()
+			Element::getClassId($element)
 		);
         
-        $scope['added'] = $element->getClassId();
+        $scope['added'] = Element::getClassId($element);
         
         return response()->json($scope);
     }
@@ -367,7 +369,7 @@ class EditController extends Controller
         
         $site = \App::make('site');
 
-        $currentItem = $site->getItemByName($element->getClass());
+        $currentItem = $site->getItemByName(Element::getClass($element));
 		$mainProperty = $currentItem->getMainProperty();
         
         $propertyList = $currentItem->getPropertyList();
@@ -434,7 +436,7 @@ class EditController extends Controller
         
         UserAction::log(
 			UserActionType::ACTION_TYPE_SAVE_ELEMENT_ID,
-			$element->getClassId()
+			Element::getClassId($element)
 		);
         
         $parent = Element::getParent($element);
@@ -444,11 +446,11 @@ class EditController extends Controller
         $parents = [];
         
         foreach ($parentList as $parent) {
-            $parentItem = $parent->getItem();
+            $parentItem = Element::getItem($parent);
             $parentMainProperty = $parentItem->getMainProperty();
             $parents[] = [
                 'id' => $parent->id,
-                'classId' => $parent->getClassId(),
+                'classId' => Element::getClassId($parent),
                 'name' => $parent->{$parentMainProperty}
             ];
         }
@@ -461,12 +463,12 @@ class EditController extends Controller
         
         $scope['element'] = [
             'id' => $element->id,
-            'classId' => $element->getClassId(),
+            'classId' => Element::getClassId($element),
             'parent' => $parent
                 ? [
                     'id' => $parent->id,
-                    'classId' => $parent->getClassId(),
-                    'name' => $parent->{$parent->getItem()->getMainProperty()},
+                    'classId' => Element::getClassId($parent),
+                    'name' => $parent->{Element::getItem($parent)->getMainProperty()},
                 ] : null,
             'name' => $element->{$currentItem->getMainProperty()},
             'created_at' => $element->created_at->format('c'),
@@ -518,7 +520,7 @@ class EditController extends Controller
         $element = $currentItem->getClass();
         
         if ($parent) {
-            $element->setParent($parent);
+            Element::setParent($element, $parent);
         }
         
         $propertyList = $currentItem->getPropertyList();
@@ -574,7 +576,7 @@ class EditController extends Controller
         
         $parent = Element::getParent($element);
         
-        $currentItem = $element->getItem();
+        $currentItem = Element::getItem($element);
         
         $propertyList = $currentItem->getPropertyList();
         

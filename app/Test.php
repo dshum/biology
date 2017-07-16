@@ -3,12 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Moonlight\Main\ElementInterface;
-use Moonlight\Main\ElementTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Test extends Model implements ElementInterface
+class Test extends Model
 {
-    use ElementTrait;
+    use SoftDeletes;
 
     /**
 	 * The Eloquent question model.

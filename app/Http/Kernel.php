@@ -42,7 +42,7 @@ class Kernel extends HttpKernel
         ],
 
         'plugins' => [
-            \Moonlight\Middleware\AuthMiddleware::class,
+            // \Moonlight\Middleware\AuthMiddleware::class,
         ],
     ];
 

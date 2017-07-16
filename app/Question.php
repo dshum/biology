@@ -3,12 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Moonlight\Main\ElementInterface;
-use Moonlight\Main\ElementTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Question extends Model implements ElementInterface
+class Question extends Model
 {
-    use ElementTrait;
+    use SoftDeletes;
 
     /**
 	 * The Eloquent test model.
@@ -34,23 +33,22 @@ class Question extends Model implements ElementInterface
         return $this->hasMany('App\Answer');
     }
 
-	public function getAnswersInfo()
-	{
-		$scope = [];
+    public function getAnswersInfo()
+    {
+        $scope = [];
 
-		$scope['answers'] = [];
+        $scope['answers'] = [];
 
-		$answers = $this->answers()->orderBy('order')->get();
+        $answers = $this->answers()->orderBy('order')->get();
 
         foreach ($answers as $answer) {
-			$scope['answers'][] = [
-				'id' => $answer->id,
-				'classId' => $answer->getClassId(),
-				'answer' => $answer->answer,
-				'correct' => $answer->correct,
-			];
+            $scope['answers'][] = [
+                'id' => $answer->id,
+                'answer' => $answer->answer,
+                'correct' => $answer->correct,
+            ];
         }
 
-		return $scope;
-	}
+        return $scope;
+    }
 }
