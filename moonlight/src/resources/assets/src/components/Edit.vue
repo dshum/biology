@@ -109,6 +109,11 @@ export default {
     }
   },
   watch: {
+    classId (to, from) {
+      this.properties = []
+
+      this.getEdit()
+    },
     item (to, from) {
       this.currentItem = to
 

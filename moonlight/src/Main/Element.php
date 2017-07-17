@@ -115,7 +115,7 @@ final class Element
 
 	public static function getParent(Model $element)
 	{
-		$item = Element::getItem($element);
+		$item = static::getItem($element);
 
 		$propertyList = $item->getPropertyList();
 
@@ -126,22 +126,7 @@ final class Element
 				&& $property->getParent()
 				&& $element->$propertyName
 			) {
-				$classId =
-					$property->getRelatedClass()
-					.static::ID_SEPARATOR
-					.$element->$propertyName;
-
-				return \Cache::rememberForever(
-					"getByClassId($classId)",
-					function() use ($element, $property, $propertyName) {
-						return
-							$element->belongsTo(
-								$property->getRelatedClass(),
-								$propertyName
-							)->
-							first();
-					}
-				);
+				return $element->belongsTo($property->getRelatedClass(), $propertyName)->first();
 			}
 		}
 
@@ -151,22 +136,7 @@ final class Element
 				&& $property->getRelatedClass()
 				&& $element->$propertyName
 			) {
-				$classId =
-					$property->getRelatedClass()
-					.static::ID_SEPARATOR
-					.$element->$propertyName;
-
-				return \Cache::rememberForever(
-					"getByClassId($classId)",
-					function() use ($element, $property, $propertyName) {
-						return
-							$element->belongsTo(
-								$property->getRelatedClass(),
-								$propertyName
-							)->
-							first();
-					}
-				);
+				return $element->belongsTo($property->getRelatedClass(), $propertyName)->first();
 			}
 		}
 
@@ -180,13 +150,13 @@ final class Element
 		$exists = [];
 
 		$count = 0;
-		$parent = self::getParent($element);
+		$parent = static::getParent($element);
 
 		while ($count < 100 && $parent instanceof Model) {
 			if (isset($exists[static::getClassId($parent)])) break;
 			$parents[] = $parent;
-			$exists[static::getClassId($parent)] = static::getClassId($parent);
-			$parent = self::getParent($parent);
+			$exists[static::getClassId($parent)] = true;
+			$parent = static::getParent($parent);
 			$count++;
 		}
 
