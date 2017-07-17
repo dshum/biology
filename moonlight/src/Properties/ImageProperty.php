@@ -11,15 +11,17 @@ class ImageProperty extends BaseProperty
 	protected $folderPath = null;
 	protected $folderWebPath = null;
 
+	protected $assetsName = 'assets';
+
 	protected $maxSize = 8192;
 	protected $maxWidth = null;
 	protected $maxHeight = null;
-	protected $allowedMimeTypes = array(
+	protected $allowedMimeTypes = [
         'gif', 'jpeg', 'pjpeg', 'png',
-	);
+	];
 
 	protected $resize = null;
-	protected $resizes = array();
+	protected $resizes = [];
 
 	public function __construct($name) {
 		parent::__construct($name);
@@ -34,6 +36,25 @@ class ImageProperty extends BaseProperty
 	public static function create($name)
 	{
 		return new self($name);
+	}
+
+	public function setAssetsName($assetsName)
+	{
+		$this->assetsName = $assetsName;
+
+		return $this;
+	}
+
+	public function getAssetsName()
+	{
+		return $this->assetsName;
+	}
+
+	public function getFolderName()
+	{
+		return method_exists($this->getItemClass(), 'getFolder')
+			? $this->getItemClass()->getFolder()
+			: $this->getItemClass()->getTable();
 	}
 
 	public function getResizeValue($name = null)
@@ -144,10 +165,9 @@ class ImageProperty extends BaseProperty
 	public function path($name = null)
 	{
 		return asset(
-			trim(
-				$this->getItemClass()->getFolder(),
-				DIRECTORY_SEPARATOR
-			)
+			$this->getAssetsName()
+			.DIRECTORY_SEPARATOR
+			.$this->getFolderName()
 			.DIRECTORY_SEPARATOR
 			.$this->getResizeValue($name)
 		);
@@ -156,11 +176,11 @@ class ImageProperty extends BaseProperty
 	public function abspath($name = null)
 	{
 		return
-			public_path().DIRECTORY_SEPARATOR
-			.trim(
-				$this->getItemClass()->getFolder(),
-				DIRECTORY_SEPARATOR
-			)
+			public_path()
+			.DIRECTORY_SEPARATOR
+			.$this->getAssetsName()
+			.DIRECTORY_SEPARATOR
+			.$this->getFolderName()
 			.DIRECTORY_SEPARATOR
 			.$this->getResizeValue($name);
 	}
@@ -227,11 +247,11 @@ class ImageProperty extends BaseProperty
 				if ( ! $extension) $extension = 'txt';
 
 				$folderPath =
-					public_path().DIRECTORY_SEPARATOR
-					.trim(
-						$this->element->getFolder(),
-						DIRECTORY_SEPARATOR
-					)
+					public_path()
+					.DIRECTORY_SEPARATOR
+					.$this->getAssetsName()
+					.DIRECTORY_SEPARATOR
+					.$this->getFolderName()
 					.DIRECTORY_SEPARATOR;
 
 				if ( ! file_exists($folderPath)) {
@@ -239,10 +259,11 @@ class ImageProperty extends BaseProperty
 				}
 
 				$folderHash =
-					trim(
+					method_exists($this->element, 'getFolderHash')
+					? trim(
 						$this->element->getFolderHash(),
 						DIRECTORY_SEPARATOR
-					);
+					) : '';
 
 				$destination = $folderHash
 					? $folderPath.DIRECTORY_SEPARATOR.$folderHash

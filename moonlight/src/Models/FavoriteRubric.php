@@ -12,22 +12,5 @@ class FavoriteRubric extends Model {
 	 * @var string
 	 */
 	protected $table = 'admin_favorite_rubrics';
-
-	public static function boot()
-	{
-		parent::boot();
-
-		static::created(function($element) {
-			$element->flush();
-		});
-
-		static::saved(function($element) {
-			$element->flush();
-		});
-
-		static::deleted(function($element) {
-			$element->flush();
-		});
-    }
 	
 }

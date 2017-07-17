@@ -171,6 +171,11 @@ $site->
 			setRequired(true)->
 			setShow(true)
 		)->
+		addProperty(
+			ImageProperty::create('photo')->
+			setTitle('Фотография')->
+			setShow(true)
+		)->
         addProperty(
 			TextfieldProperty::create('password')->
 			setTitle('Пароль')->

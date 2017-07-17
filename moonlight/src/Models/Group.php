@@ -40,30 +40,6 @@ class Group extends Model {
 		return array('created_at', 'updated_at');
 	}
 
-	public static function boot()
-	{
-		parent::boot();
-
-		static::created(function($element) {
-			$element->flush();
-		});
-
-		static::saved(function($element) {
-			$element->flush();
-		});
-
-		static::deleted(function($element) {
-			$element->flush();
-		});
-    }
-
-	public function flush()
-	{
-//		\Cache::tags('Group')->flush();
-
-//		\Cache::forget("getGroupById({$this->id})");
-	}
-
 	public function users()
 	{
 		return $this->belongsToMany('Moonlight\Models\User', $this->pivotTable);

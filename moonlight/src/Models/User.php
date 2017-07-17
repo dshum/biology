@@ -38,30 +38,6 @@ class User extends Model {
 		return array('created_at', 'updated_at', 'last_login');
 	}
 
-	public static function boot()
-	{
-		parent::boot();
-
-		static::created(function($element) {
-			$element->flush();
-		});
-
-		static::saved(function($element) {
-			$element->flush();
-		});
-
-		static::deleted(function($element) {
-			$element->flush();
-		});
-  }
-
-	public function flush()
-	{
-		//\Cache::tags('User', 'Group')->flush();
-
-		//\Cache::forget("getUserById({$this->id})");
-	}
-
 	public function isSuperUser()
 	{
 		return $this->superuser ? true : false;

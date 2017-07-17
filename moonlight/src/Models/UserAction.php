@@ -13,28 +13,6 @@ class UserAction extends Model {
 	 */
 	protected $table = 'admin_user_actions';
 
-	public static function boot()
-	{
-		parent::boot();
-
-		static::created(function($element) {
-			$element->flush();
-		});
-
-		static::saved(function($element) {
-			$element->flush();
-		});
-
-		static::deleted(function($element) {
-			$element->flush();
-		});
-    }
-
-	public function flush()
-	{
-		//\Cache::tags('UserAction')->flush();
-	}
-
 	public function user()
 	{
 		return $this->belongsTo('Moonlight\Models\User');
