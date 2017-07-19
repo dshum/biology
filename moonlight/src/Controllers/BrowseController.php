@@ -16,6 +16,8 @@ use Moonlight\Properties\ImageProperty;
 
 class BrowseController extends Controller
 {
+    const DEFAULT_PERPAGE = 10;
+
     /**
      * Browse plugin.
      *
@@ -802,22 +804,33 @@ class BrowseController extends Controller
 		foreach ($orderByList as $field => $direction) {
             $criteria->orderBy($field, $direction);
             $property = $currentItem->getPropertyByName($field);
-            if ($property instanceof OrderProperty) {
+            if (
+                $property instanceof OrderProperty 
+                && $property->getRelatedClass() == Element::getClass($element)
+            ) {
                 $hasOrderProperty = true;
             }
         }
         
-        $perpage = $currentItem->getPerPage();
+        if ($hasOrderProperty) {
+            $elementList = $criteria->get();
+
+            $total = sizeof($elementList);
+
+            $pager = null;
+        } else {
+            $perpage = $currentItem->getPerPage() ?: self::DEFAULT_PERPAGE;
             
-        $elementList = $criteria->paginate($perpage);
+            $elementList = $criteria->paginate($perpage);
 
-        $total = $elementList->total();
+            $total = $elementList->total();
 
-        $pager = $total > $perpage ? [
-            'currentPage' => $elementList->currentPage(),
-            'lastPage' => $elementList->lastPage(),
-        ] : null;
-
+            $pager = $total > $perpage ? [
+                'currentPage' => $elementList->currentPage(),
+                'lastPage' => $elementList->lastPage(),
+            ] : null;
+        }
+        
         $elements = [];
         $properties = [];
         $views = [];

@@ -3,6 +3,7 @@
 use Moonlight\Main\Site;
 use Moonlight\Main\Item;
 use Moonlight\Properties\BaseProperty;
+use Moonlight\Properties\OrderProperty;
 use Moonlight\Properties\CheckboxProperty;
 use Moonlight\Properties\DatetimeProperty;
 use Moonlight\Properties\DateProperty;
@@ -341,8 +342,11 @@ $site->
 		setTitle('Вопрос')->
 		setMainProperty('name')->
         setCreate(true)->
-		setPerPage(25)->
-		addOrder()->
+		addOrderBy('order')->
+		addProperty(
+			OrderProperty::create('order')->
+			setRelatedClass('App\Test')
+		)->
 		addProperty(
 			TextfieldProperty::create('name')->
 			setTitle('Название')
@@ -379,7 +383,8 @@ $site->
 			setRelatedClass('App\Test')->
             setRelatedMethod('questions')->
             setOpenItem(true)->
-			setShow(true)
+			setShow(true)->
+			setShowOrder(true)
 		)->
 		addProperty(
 			OneToOneProperty::create('topic_id')->

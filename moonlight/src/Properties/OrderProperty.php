@@ -8,9 +8,25 @@ use Moonlight\Main\Item;
 
 class OrderProperty extends BaseProperty
 {
+	protected $relatedClass = null;
+	
 	public static function create($name)
 	{
 		return new self($name);
+	}
+
+	public function setRelatedClass($relatedClass)
+	{
+		Item::assertClass($relatedClass);
+
+		$this->relatedClass = $relatedClass;
+
+		return $this;
+	}
+
+	public function getRelatedClass()
+	{
+		return $this->relatedClass;
 	}
 
 	public function setItem(Item $item)

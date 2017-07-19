@@ -67,20 +67,16 @@ class RegisterController extends Controller {
 
 		$validator = Validator::make($request->all(), [
 			'email' => 'required|email|unique:users,email',
-			'password' => 'required|min:6|max:32',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+			'password' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
         ], [
 			'email.required' => 'Введите e-mail',
             'email.email' => 'Некорректный e-mail',
 			'email.unique' => 'Такой e-mail уже зарегистрирован',
 			'password.required' => 'Придумайте пароль',
-			'password.min' => 'Слишком короткий пароль',
-            'password.max' => 'Слишком длинный пароль',
             'first_name.required' => 'Введите имя',
-            'first_name.max' => 'Слишком длинное имя',
             'last_name.required' => 'Введите фамилию',
-            'last_name.max' => 'Слишком длинная фамилия',
         ]);
         
         if ($validator->fails()) {

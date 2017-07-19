@@ -15,6 +15,13 @@
     </div>
     <p v-if="view.exists"><input type="checkbox" :name="view.name + '_drop'" :id="view.name + '_drop'" v-on:change="update($event.target.checked)" v-model="drop" value="1"><label :for="view.name + '_drop'">Удалить</label></p>
   </div>
+  <div v-else-if="mode === 'link'">
+    <div class="label file"><i class="fa fa-picture-o"></i><span>{{ view.title }}</span></div>
+  </div>
+  <div v-else-if="mode === 'search'">
+    <div class="label file"><i class="fa fa-picture-o"></i><span>{{ view.title }}</span></div>
+    <div><input type="text" :value="view.value" placeholder=""></div>
+  </div>
 </template>
 
 <script>

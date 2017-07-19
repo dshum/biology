@@ -10,6 +10,7 @@ class OneToOneProperty extends BaseProperty
 {
 	protected $relatedClass = null;
 	protected $parent = false;
+	protected $showOrder = false;
 
 	public function __construct($name) {
 		parent::__construct($name);
@@ -49,6 +50,18 @@ class OneToOneProperty extends BaseProperty
 	public function getParent()
 	{
 		return $this->parent;
+	}
+
+	public function setShowOrder($showOrder)
+	{
+		$this->showOrder = $showOrder;
+
+		return $this;
+	}
+
+	public function getShowOrder()
+	{
+		return $this->showOrder;
 	}
 
 	public function setElement(Model $element)

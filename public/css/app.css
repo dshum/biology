@@ -522,6 +522,10 @@ footer {
     font-size: 1rem;
 }
 
+footer .right {
+  margin-left: 2rem;
+}
+
 footer .right a {
     color: black;
 }

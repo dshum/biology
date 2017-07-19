@@ -2,6 +2,8 @@
 
 namespace Moonlight\Properties;
 
+use Moonlight\Main\Element;
+
 class TextfieldProperty extends BaseProperty 
 {
 	public static function create($name)
@@ -15,8 +17,8 @@ class TextfieldProperty extends BaseProperty
         
 		$request = $this->getRequest();
         $name = $this->getName();
-        $relatedItem = Element::getItem($this);
         $relatedClass = $this->getItemClass();
+        $relatedItem = $this->getItem();
         $mainProperty = $relatedItem->getMainProperty();
 
         if ($mainProperty) {

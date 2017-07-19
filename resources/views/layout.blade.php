@@ -33,6 +33,7 @@
 		<footer>
 			@if (Auth::check())
 			<div class="right"><a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i>Выход</a></div>
+			<div class="right"><a href="{{ route('profile') }}"><i class="fa fa-user"></i>Профиль</a></div>
 			@endif
 			<div>Тесты ЕГЭ по биологии, {{ date('Y') }}</div>
 		</footer>

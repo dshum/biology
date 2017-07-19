@@ -11,8 +11,6 @@
 |
 */
 
-use App\Test;
-
 Route::group(['before' => 'guest'], function() {
 	Route::get('/register', ['as' => 'register', 'uses' => 'RegisterController@index']);
 	Route::post('/register', ['as' => 'register', 'uses' => 'RegisterController@register']);
@@ -32,6 +30,9 @@ Route::group(['before' => 'auth'], function() {
 	Route::get('/logout', ['as' => 'logout', 'uses' => 'LoginController@logout']);
 
 	Route::get('/home', ['as' => 'home', 'uses' => 'HomeController@index']);
+
+	Route::get('/profile', ['as' => 'profile', 'uses' => 'HomeController@profile']);
+	Route::post('/profile', ['as' => 'profile', 'uses' => 'HomeController@save']);
 
 	Route::get('/test_{id}', ['as' => 'test', 'uses' => 'TestController@index']);
 	Route::post('/test_{id}', ['as' => 'test', 'uses' => 'TestController@save']);

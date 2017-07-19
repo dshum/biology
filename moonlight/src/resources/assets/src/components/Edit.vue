@@ -45,7 +45,7 @@
         </div>
         <h2 v-if="currentItem">Редактирование элемента типа <b>{{currentItem.name}}</b></h2>
         <div class="site" v-if="currentElement.href"><i class="fa fa-external-link"></i><a href target="_blank">Смотреть на сайте</a></div>
-        <form @submit.prevent="save()">
+        <form @submit.prevent="save()" v-if="properties.length">
           <div class="row" v-for="property in properties">
             <property v-on:update="update(arguments[0], arguments[1])" v-on:save="save()" :property="property" mode="edit" :view="property.view"></property>
           </div>

@@ -35,6 +35,7 @@ class MoonlightServiceProvider extends ServiceProvider
         DB::enableQueryLog(); 
         
         include __DIR__.'/routes.php';
+        include __DIR__.'/helpers.php';
     }
 
     /**

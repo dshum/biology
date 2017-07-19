@@ -11,6 +11,7 @@ class ManyToManyProperty extends BaseProperty
 {
 	protected $relatedClass = null;
     protected $relatedMethod = null;
+	protected $showOrder = false;
     
     protected $list = [];
 
@@ -49,6 +50,18 @@ class ManyToManyProperty extends BaseProperty
 	public function getRelatedMethod()
 	{
 		return $this->relatedMethod;
+	}
+
+	public function setShowOrder($showOrder)
+	{
+		$this->showOrder = $showOrder;
+
+		return $this;
+	}
+
+	public function getShowOrder()
+	{
+		return $this->showOrder;
 	}
 
 	public function setList($list)

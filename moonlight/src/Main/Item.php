@@ -46,14 +46,6 @@ class Item
 		if ( ! isset($parents['Illuminate\Database\Eloquent\Model'])) {
 			throw new \Exception("Class $name must extend class Illuminate\Database\Eloquent\Model.");
 		}
-
-		/*
-		$traits = class_uses($name);
-
-		if ( ! isset($traits['Illuminate\Database\Eloquent\SoftDeletes'])) {
-			throw new \Exception("Class $name must use trait Illuminate\Database\Eloquent\SoftDeletes.");
-		}
-		*/
 	}
 
 	public function setName($name)
@@ -231,8 +223,7 @@ class Item
 		$this->
 		addOrderBy($name, $direction)->
 		addProperty(
-			OrderProperty::create($name)->
-            setHidden(true)
+			OrderProperty::create($name)
 		);
 
 		return $this;
