@@ -5,8 +5,8 @@
         <ul class="header">
           <li class="h2" @click="toggle()"><span>{{ item.name }}</span></li>
           <li class="total" v-if="total">
-            <span v-if="item.hasOrderProperty" class="order-toggler" @click="showOrder = !showOrder">Всего {{ total }} {{ selectCaseForNumber(total, ['элемент', 'элемента', 'элементов']) }}</span>
-            <span v-if="!item.hasOrderProperty">Всего {{ total }} {{ selectCaseForNumber(total, ['элемент', 'элемента', 'элементов']) }}</span>
+            <span v-if="item.hasOrderProperty && opened" class="order-toggler" @click="showOrder = !showOrder">Всего {{ total }} {{ selectCaseForNumber(total, ['элемент', 'элемента', 'элементов']) }}</span>
+            <span v-else>Всего {{ total }} {{ selectCaseForNumber(total, ['элемент', 'элемента', 'элементов']) }}</span>
           </li>
         </ul>
         <transition name="fade">
