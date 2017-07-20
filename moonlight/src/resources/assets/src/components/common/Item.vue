@@ -1,58 +1,71 @@
 <template>
-  <transition name="fade-item">
-    <div class="item" :class="{active: total}" v-if="total">
-      <ul class="header">
-        <li class="h2" @click="toggle()"><span>{{ item.name }}</span></li>
-        <li class="total" v-if="total">
-          Всего {{ total }} {{ selectCaseForNumber(total, ['элемент', 'элемента', 'элементов']) }}
-        </li>
-      </ul>
-      <transition name="fade">
-        <div v-if="opened && elements">
-          <table class="elements">
-            <thead>
-              <tr>
-                <th class="browse"><i class="fa fa-sort"></i></th>
-                <th><a href>{{ item.mainProperty }}</a></th>
-                <th v-for="property in properties"><a href>{{ property.title }}</a></th>
-                <th class="check"><div class="check"></div></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="element in elements">
-                <td class="browse"><router-link :to="{name: 'browse', params: {classId: element.classId}}"><i class="fa fa-angle-right"></i></router-link></td>
-                <td class="name"><router-link :to="{name: 'browse', params: {classId: element.classId}, query: {mode: 'edit'}}"><i class="fa fa-pencil"></i><span>{{ element.name }}</span></router-link></td>
-                <td v-for="property in properties">
-                  <property :property="property" mode="browse" :view="element.views[property.name]"></property>
-                </td>
-                <td class="check"><div class="check"></div></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="pager" v-if="pager">
-            <div class="arrow" :class="{active: pager.currentPage > 1}" @click="left()"><i class="fa fa-arrow-left"></i></div>
-            <div class="arrow" :class="{active: pager.currentPage > 1}" @click="first()">1</div>
-            <div class="page"><input type="text" v-model="pager.currentPage" @keydown="page($event)"></div>
-            <div class="arrow" :class="{active: pager.currentPage < pager.lastPage}" @click="last()">{{ pager.lastPage }}</div>
-            <div class="arrow" :class="{active: pager.currentPage < pager.lastPage}" @click="right()"><i class="fa fa-arrow-right"></i></div>
+  <div>
+    <transition name="fade-item">
+      <div class="item" :class="{active: total}" v-if="total">
+        <ul class="header">
+          <li class="h2" @click="toggle()"><span>{{ item.name }}</span></li>
+          <li class="total" v-if="total">
+            <span v-if="item.hasOrderProperty" class="order-toggler" @click="showOrder = !showOrder">Всего {{ total }} {{ selectCaseForNumber(total, ['элемент', 'элемента', 'элементов']) }}</span>
+            <span v-if="!item.hasOrderProperty">Всего {{ total }} {{ selectCaseForNumber(total, ['элемент', 'элемента', 'элементов']) }}</span>
+          </li>
+        </ul>
+        <transition name="fade">
+          <div v-if="opened && elements">
+            <table class="elements">
+              <thead>
+                <tr>
+                  <th class="browse" v-show="showOrder"><i class="fa fa-arrows"></i></th>
+                  <th class="browse" v-show="!showOrder"><i class="fa fa-sort"></i></th>
+                  <th><a href>{{ item.mainProperty }}</a></th>
+                  <th v-for="property in properties"><a href>{{ property.title }}</a></th>
+                  <th class="check"><div class="check"></div></th>
+                </tr>
+              </thead>
+              <draggable v-model="elements" element="tbody" :options="{ handle: 'div.drag', chosenClass: 'chosen' }" @end="updateOrder">
+                <tr v-for="element in elements">
+                  <td class="browse" v-show="showOrder"><div class="drag"><i class="fa fa-arrows"></i></div></td>
+                  <td class="browse" v-show="!showOrder"><router-link :to="{name: 'browse', params: {classId: element.classId}}"><i class="fa fa-angle-right"></i></router-link></td>
+                  <td class="name"><router-link :to="{name: 'browse', params: {classId: element.classId}, query: {mode: 'edit'}}"><i class="fa fa-pencil"></i><span>{{ element.name }}</span></router-link></td>
+                  <td v-for="property in properties">
+                    <property :property="property" mode="browse" :view="element.views[property.name]"></property>
+                  </td>
+                  <td class="check"><div class="check"></div></td>
+                </tr>
+              </draggable>
+            </table>
+            <div class="pager" v-if="pager">
+              <div class="arrow" :class="{active: pager.currentPage > 1}" @click="left()"><i class="fa fa-arrow-left"></i></div>
+              <div class="arrow" :class="{active: pager.currentPage > 1}" @click="first()">1</div>
+              <div class="page"><input type="text" v-model="pager.currentPage" @keydown="page($event)"></div>
+              <div class="arrow" :class="{active: pager.currentPage < pager.lastPage}" @click="last()">{{ pager.lastPage }}</div>
+              <div class="arrow" :class="{active: pager.currentPage < pager.lastPage}" @click="right()"><i class="fa fa-arrow-right"></i></div>
+            </div>
           </div>
-        </div>
-      </transition>
-    </div>
-  </transition>
+        </transition>
+      </div>
+    </transition>
+    <transition name="fade">
+      <spinner v-show="loading" message="Минутку..."></spinner>
+    </transition>
+  </div>
 </template>
 
 <script>
+import draggable from 'vuedraggable'
+import Spinner from '@/components/common/Spinner'
 import Property from '@/components/Property'
 
 export default {
   name: 'item',
-  components: { Property },
+  components: { draggable, Spinner, Property },
   props: ['classId', 'item'],
   data () {
     return {
       show: false,
+      showOrder: false,
+      loading: false,
       opened: this.item.open,
+      hasOrderProperty: false,
       total: 0,
       properties: [],
       elements: [],
@@ -82,6 +95,24 @@ export default {
     }
   },
   methods: {
+    updateOrder (event) {
+      if (event.newIndex === event.oldIndex) return false
+
+      this.loading = true
+
+      let orders = []
+
+      this.elements.forEach((element, index) => {
+        orders.push(element.classId)
+      })
+
+      this.$http.post('/elements/order', {
+        orders: orders
+      }).then(response => {
+        this.$eventBus.emit('refreshTree', this.classId)
+        this.loading = false
+      })
+    },
     getCount () {
       let params = [
         `item=${this.item.id}`,
@@ -247,6 +278,10 @@ export default {
 </script>
 
 <style scoped>
+.order-toggler {
+  cursor: pointer;
+}
+
 .fade-item-enter-active {
   transition: opacity .8s;
 }
@@ -305,6 +340,16 @@ ul.header li.total {
 
 table.elements {
   margin: 0;
+}
+
+table.elements td.browse div.drag .fa {
+  top: 0;
+  font-size: 1rem;
+  cursor: grab;
+}
+
+.chosen {
+  background-color: thistle;
 }
 
 .pager {

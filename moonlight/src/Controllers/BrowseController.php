@@ -55,14 +55,15 @@ class BrowseController extends Controller
         
         $loggedUser = LoggedUser::getUser();
         
-        $elements = $request->input('element');
+        $orders = $request->input('orders');
 
-        if (is_array($elements) && sizeof($elements) > 1) {
-            foreach ($elements as $order => $classId) {
+        if (is_array($orders) && sizeof($orders) > 1) {
+            foreach ($orders as $order => $classId) {
                 $element = Element::getByClassId($classId);
                 
                 if ($element && $loggedUser->hasUpdateAccess($element)) {
                     $item = Element::getItem($element);
+
                     if ($item->getOrderProperty()) {
                         $element->{$item->getOrderProperty()} = $order;
                         $element->save();
@@ -70,7 +71,7 @@ class BrowseController extends Controller
                 }
             }
 
-            $scope['ordered'] = $elements;
+            $scope['ordered'] = $orders;
         }
 
         return response()->json($scope);
@@ -388,7 +389,7 @@ class BrowseController extends Controller
     }
     
     /**
-     * Delete elements from trash.
+     * Restore elements from trash.
      *
      * @return Response
      */
@@ -806,7 +807,11 @@ class BrowseController extends Controller
             $property = $currentItem->getPropertyByName($field);
             if (
                 $property instanceof OrderProperty 
-                && $property->getRelatedClass() == Element::getClass($element)
+                && (
+                    ! $element 
+                    || ! $property->getRelatedClass()
+                    || $property->getRelatedClass() == Element::getClass($element)
+                )
             ) {
                 $hasOrderProperty = true;
             }
@@ -866,6 +871,7 @@ class BrowseController extends Controller
             ];
         }
 
+        $scope['hasOrderProperty'] = $hasOrderProperty;
         $scope['total'] = $total;
         $scope['pager'] = $pager;
         $scope['elements'] = $elements;
@@ -1092,11 +1098,26 @@ class BrowseController extends Controller
         foreach ($binds as $bind) {
             $item = $site->getItemByName($bind);
 
-            if ( ! $item) continue;
+            if (! $item) continue;
 
             $propertyList = $item->getPropertyList();
 
             $mainPropertyTitle = $item->getMainPropertyTitle();
+
+            $hasOrderProperty = false;
+
+            foreach ($propertyList as $property) {
+                if (
+                    $property instanceof OrderProperty
+                    && (
+                        ! $property->getRelatedClass()
+                        || $property->getRelatedClass() == Element::getClass($element)
+                    )
+                ) {
+                    $hasOrderProperty = true;
+                    break;
+                }
+            }
 
             foreach ($propertyList as $property) {
                 if (
@@ -1114,6 +1135,7 @@ class BrowseController extends Controller
                         'name' => $item->getTitle(),
                         'mainProperty' => $mainPropertyTitle,
                         'open' => $open,
+                        'hasOrderProperty' => $hasOrderProperty,
                     ];
 
                     if ($item->getCreate()) {
@@ -1139,6 +1161,7 @@ class BrowseController extends Controller
                         'name' => $item->getTitle(),
                         'mainProperty' => $mainPropertyTitle,
                         'open' => $open,
+                        'hasOrderProperty' => $hasOrderProperty,
                     ];
 
                     if ($item->getCreate()) {
@@ -1191,12 +1214,24 @@ class BrowseController extends Controller
                     : false;
 
                 $mainPropertyTitle = $item->getMainPropertyTitle();
+
+                $hasOrderProperty = false;
+        
+                $propertyList = $item->getPropertyList();
+
+                foreach ($propertyList as $property) {
+                    if ($property instanceof OrderProperty) {
+                        $hasOrderProperty = true;
+                        break;
+                    }
+                }
                 
                 $items[] = [
                     'id' => $item->getNameId(),
                     'name' => $item->getTitle(),
                     'mainProperty' => $mainPropertyTitle,
                     'open' => $open,
+                    'hasOrderProperty' => $hasOrderProperty,
                 ];
                 
                 if ($item->getCreate()) {

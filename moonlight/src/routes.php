@@ -121,6 +121,8 @@ Route::group(['prefix' => 'moonlight/api'], function() {
         Route::get('elements/autocomplete', 'Moonlight\Controllers\BrowseController@autocomplete');
         
         Route::get('elements/{classId}', 'Moonlight\Controllers\BrowseController@element');
+
+        Route::post('elements/order', 'Moonlight\Controllers\BrowseController@order');
         
         Route::get('browse/root', 'Moonlight\Controllers\BrowseController@root');
         
