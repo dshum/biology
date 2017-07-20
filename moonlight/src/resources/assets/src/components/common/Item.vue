@@ -345,11 +345,12 @@ table.elements {
 table.elements td.browse div.drag .fa {
   top: 0;
   font-size: 1rem;
+  color: steelblue;
   cursor: grab;
 }
 
-.chosen {
-  background-color: thistle;
+table.elements tr.chosen {
+  background-color: #abc;
 }
 
 .pager {
