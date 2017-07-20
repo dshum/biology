@@ -14,8 +14,7 @@
             <table class="elements">
               <thead>
                 <tr>
-                  <th class="browse" v-show="showOrder"><i class="fa fa-arrows"></i></th>
-                  <th class="browse" v-show="!showOrder"><i class="fa fa-sort"></i></th>
+                  <th class="browse"><i class="fa fa-sort"></i></th>
                   <th><a href>{{ item.mainProperty }}</a></th>
                   <th v-for="property in properties"><a href>{{ property.title }}</a></th>
                   <th class="check"><div class="check"></div></th>
@@ -23,7 +22,7 @@
               </thead>
               <draggable v-model="elements" element="tbody" :options="{ handle: 'div.drag', chosenClass: 'chosen' }" @end="updateOrder">
                 <tr v-for="element in elements">
-                  <td class="browse" v-show="showOrder"><div class="drag"><i class="fa fa-arrows"></i></div></td>
+                  <td class="browse" v-show="showOrder"><div class="drag"><i class="fa fa-sort"></i></div></td>
                   <td class="browse" v-show="!showOrder"><router-link :to="{name: 'browse', params: {classId: element.classId}}"><i class="fa fa-angle-right"></i></router-link></td>
                   <td class="name"><router-link :to="{name: 'browse', params: {classId: element.classId}, query: {mode: 'edit'}}"><i class="fa fa-pencil"></i><span>{{ element.name }}</span></router-link></td>
                   <td v-for="property in properties">
