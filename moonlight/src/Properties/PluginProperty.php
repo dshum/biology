@@ -60,7 +60,7 @@ class PluginProperty extends BaseProperty
 	public function getEditView()
 	{
         $element = $this->getElement();
-        $item = Element::getItem($this);
+        $item = Element::getItem($element);
 		$mainProperty = $item->getMainProperty();
 
 		$scope = [
